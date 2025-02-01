@@ -18,7 +18,7 @@ attached = con.sql("SELECT database_name as DB_NAME, path as PATH, type FROM duc
 print("Attached the following databases")
 attached.show()
 
-missing_db_names = set(attached["DB_NAME"].strip()) - set(df["DB_NAME"].strip())
+missing_db_names = set(attached["DB_NAME"]) - set(df["DB_NAME"])
 if not missing_db_names:
     print("Primary databases attached successfully.")
 else:
