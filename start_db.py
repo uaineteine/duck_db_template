@@ -14,4 +14,7 @@ primary_dbs = df[df['PURPOSE'].str.strip() == 'primary'] # Filter for primary da
 for index, row in primary_dbs.iterrows():
     con.execute(f"ATTACH DATABASE '{row['PATH'].strip()}' AS {row['DB_NAME'].strip()}")
 
+attached = con.sql("SELECT database_name, path, type FROM duckdb_databases")
+attached.show()
+
 print("Primary databases attached successfully.")
