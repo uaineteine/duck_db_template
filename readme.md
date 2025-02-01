@@ -5,3 +5,8 @@ Creates multiple partitioned databases based on a csv list supplied by the user.
 #### STATUS
 
 [![Run DuckDB Script](https://github.com/uaineteine/duck_db_template/actions/workflows/start_server.yaml/badge.svg?branch=develop)](https://github.com/uaineteine/duck_db_template/actions/workflows/start_server.yaml)
+
+
+#### GET STARTED
+
+Modify the `db_list.csv` to outline your proposed multi-database structure and then run the start_db script. This will launch the server and return a connection for you to use.
