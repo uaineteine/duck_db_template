@@ -14,12 +14,11 @@ primary_dbs = df[df['PURPOSE'].str.strip() == 'primary'] # Filter for primary da
 for index, row in primary_dbs.iterrows():
     con.execute(f"ATTACH DATABASE '{row['PATH'].strip()}' AS {row['DB_NAME'].strip()}")
 
-attached = con.sql("SELECT database_name as NAME, path as PATH, type FROM duckdb_databases")
+attached = con.sql("SELECT database_name as DB_NAME, path as PATH, type FROM duckdb_databases")
 print("Attached the following databases")
 attached.show()
 
-
-missing_db_names = set(attached["DB_NAME"].str.strio()) - set(df["NAME"].str.strip())
+missing_db_names = set(attached["DB_NAME"].str.strio()) - set(df["DB_NAME"].str.strip())
 if not missing_db_names:
     print("Primary databases attached successfully.")
 else:
