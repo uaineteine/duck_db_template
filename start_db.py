@@ -2,15 +2,12 @@ import duckdb
 import pandas as pd
 
 # Read the CSV file using pandas
-df = pd.read_csv(csv_file, delimiter='|')
+df = pd.read_csv("db_list.csv", delimiter='|')
 
 driver_name = df[df['PURPOSE'].str.strip() == 'main']['PATH'][0]
 
 # Connect to the driver database
 con = duckdb.connect(haupt_name)
-
-# Path to the CSV file
-csv_file = 'db_list.csv'
 
 # Attach primary databases
 primary_dbs = df[df['PURPOSE'].str.strip() == 'primary'] # Filter for primary databases
