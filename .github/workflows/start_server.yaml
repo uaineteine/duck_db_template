@@ -22,4 +22,4 @@ jobs:
 
       - name: Run script
         run: |
-          python start_db.py  # Replace 'your_script.py' with the path to your script
+          python start_db.py 
