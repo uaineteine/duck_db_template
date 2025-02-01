@@ -5,9 +5,8 @@ import pandas as pd
 df = pd.read_csv("db_list.csv", delimiter='|')
 
 driver_name = df[df['PURPOSE'].str.strip() == 'main']['PATH'][0]
-
 # Connect to the driver database
-con = duckdb.connect(haupt_name)
+con = duckdb.connect(driver_name)
 
 # Attach primary databases
 primary_dbs = df[df['PURPOSE'].str.strip() == 'primary'] # Filter for primary databases
