@@ -1,11 +1,6 @@
 import duckdb
 import parse_db_list
-
-def get_attached_dbs(db_con):
-    return db_con.sql("SELECT database_name as DB_NAME, path as PATH, type FROM duckdb_databases")
-
-def get_inventory(db_con):
-    return db_con.sql("SELECT * from duckdb_tables")
+import metadata
 
 def create_and_attach_dbs():
     # Read the CSV file using pandas
@@ -18,7 +13,7 @@ def create_and_attach_dbs():
     for i, row in primary_dbs.iterrows():
         con.execute(f"ATTACH DATABASE '{row['PATH']}' AS {row['DB_NAME']}")
 
-    attached = get_attached_dbs(con)
+    attached = metadata.get_attached_dbs(con)
     print("Attached the following databases")
     attached.show()
 
@@ -36,4 +31,5 @@ def start_db():
 
 con = start_db()
 
-get_inventory(con).show()
+#return the table list
+metadata.get_inventory(con).show()
