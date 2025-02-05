@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - develop
 
 jobs:
   run-duckdb-script:
@@ -25,4 +26,4 @@ jobs:
 
       - name: Run script
         run: |
-          python start_db.py 
+          python test_start_db.py 
