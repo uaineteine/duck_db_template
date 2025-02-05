@@ -28,11 +28,3 @@ def create_and_attach_dbs():
 def start_db():
     con = create_and_attach_dbs()
     return con
-
-con = start_db()
-
-#con.sql("CREATE TABLE users.test (i INTEGER)")
-#con.sql("CREATE TABLE models.test (k INTEGER)")
-#con.sql("CREATE TABLE a1.test (f INTEGER)")
-#return the table list
-#metadata.get_inventory(con).show()
