@@ -4,7 +4,7 @@ import metadata
 
 def create_and_attach_dbs():
     # Read the CSV file using pandas
-    driver_name, all_names, primary_dbs = parse_db_list.parselist()
+    driver_name, all_names, primary_dbs, secondary_dbs = parse_db_list.parselist()
 
     # Connect to the driver database
     con = duckdb.connect(driver_name)
@@ -13,13 +13,17 @@ def create_and_attach_dbs():
     for i, row in primary_dbs.iterrows():
         con.execute(f"ATTACH DATABASE '{row['PATH']}' AS {row['DB_NAME']}")
 
+    # Attach secondary databases
+    for i, row in secondary_dbs.iterrows():
+        con.execute(f"ATTACH DATABASE '{row['PATH']}' AS {row['DB_NAME']} READ_ONLY")
+
     attached = metadata.get_attached_dbs(con)
     print("Attached the following databases")
     attached.show()
 
     all_assigned = attached["DB_NAME"] not in all_names
     if all_assigned:
-        print("Primary databases attached successfully.")
+        print("All databases attached successfully.")
     else:
         print(f"Missing databases")
 

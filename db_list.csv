@@ -4,3 +4,4 @@ PATH|DB_NAME|PURPOSE
 "models.db"|models|primary
 "annex1.db"|a1|primary
 "annex2.db"|a2|primary
+"annex2.db"|a2b|secondary
