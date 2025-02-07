@@ -38,5 +38,6 @@ def parselist():
     driver_name = verify_if_1_maindb(df)
 
     primary_dbs = df[df['PURPOSE'] == 'primary'] # Filter for primary databases
+    primary_dbs = df[df['PURPOSE'] == 'secondary'] # Filter for secondary databases
 
-    return driver_name, all_names, primary_dbs
+    return driver_name, all_names, primary_dbs, secondary_dbs
