@@ -13,9 +13,9 @@ def create_and_attach_dbs():
     for i, row in primary_dbs.iterrows():
         con.execute(f"ATTACH DATABASE '{row['PATH']}' AS {row['DB_NAME']}")
 
-    # Attach secondary databases
+    # Attach secondary databases as read only
     for i, row in secondary_dbs.iterrows():
-        con.execute(f"ATTACH DATABASE '{row['PATH']}' AS {row['DB_NAME']} READ_ONLY")
+        con.execute(f"ATTACH DATABASE '{row['PATH']}' AS {row['DB_NAME']} (READ_ONLY)")
 
     attached = metadata.get_attached_dbs(con)
     print("Attached the following databases")
