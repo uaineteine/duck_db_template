@@ -1,8 +1,8 @@
 import pandas as pd
 
-def readlist():
+def readlist(csvpath):
     # Read the CSV file using pandas
-    df = pd.read_csv("db_list.csv", delimiter='|')
+    df = pd.read_csv(csvpath, delimiter='|')
     return df
 
 def clean_db_list(df):
@@ -27,9 +27,9 @@ def verify_if_1_maindb(df):
 
     return driver_names[0]
 
-def parselist():
+def parselist(csvpath):
     print("Parsing database list file...")
-    df = clean_db_list(readlist())
+    df = clean_db_list(readlist(csvpath))
 
     #check for duplicated names
     all_names = verify_if_any_duplicates(df)

@@ -1,10 +1,9 @@
 import duckdb
-import parse_db_list
-import metadata
+from modules import *
 
 def create_and_attach_dbs():
     # Read the CSV file using pandas
-    driver_name, all_names, primary_dbs, secondary_dbs = parse_db_list.parselist()
+    driver_name, all_names, primary_dbs, secondary_dbs = parse_db_list.parselist("db_list.csv")
 
     # Connect to the driver database
     con = duckdb.connect(driver_name)
