@@ -25,3 +25,6 @@ I would recommend keeping this template as a dedicated sub-folder and importing 
 
 Function without the default tables made in the `def_tables.csv`. Please only append to this or use a 2nd csv.
 
+#### What we want it to do
+
+Automaticlaly produce an svg chart of data items
