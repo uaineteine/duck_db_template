@@ -43,5 +43,5 @@ def create_and_attach_dbs():
 def start_db():
     con = create_and_attach_dbs()
     #attempt to make new tables
-    init_tables_from_list.init_these_tables(con, "init_tables/new_tables.csv")
+    init_tables_from_list.init_these_tables(con, "init_tables/def_tables.csv")
     return con

@@ -1,6 +1,5 @@
-import duckdb
 import pandas as pd
-from modules import fileio
+from modules import metadata
 
 #read in master list
 def read_table_list(path):
@@ -10,14 +9,16 @@ def read_table_list(path):
 def init_table(con, frame, db, tablename):
     #takes in a frame of string columns VARNAME and TYPE
     #those formats should be duckDB compatible
-    print("Creating table " + db + "." + tablename)
+    exist = metadata.does_table_exist(con, db, tablename)
+    if (exist == False):
+        print("Creating table " + db + "." + tablename)
 
-    tbl_ref = db + "." + tablename
-    exstring = "CREATE TABLE IF NOT EXISTS " + tbl_ref + "("
-    # Create a comma-delimited list with variable names and types
-    exstring = exstring + ', '.join([f"{row['VARNAME']} {row['TYPE']}" for _, row in frame.iterrows()])
-    exstring = exstring + ")"
-    con.sql(exstring)
+        tbl_ref = db + "." + tablename
+        exstring = "CREATE TABLE IF NOT EXISTS " + tbl_ref + "("
+        # Create a comma-delimited list with variable names and types
+        exstring = exstring + ', '.join([f"{row['VARNAME']} {row['TYPE']}" for _, row in frame.iterrows()])
+        exstring = exstring + ")"
+        con.sql(exstring)
 
 def init_these_tables(con, new_table_list):
     df = read_table_list(new_table_list)
