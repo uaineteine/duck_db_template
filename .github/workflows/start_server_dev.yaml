@@ -25,4 +25,4 @@ jobs:
 
       - name: Run script
         run: |
-          python test_start_db.py 
+          python example_start_db.py 
