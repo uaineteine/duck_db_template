@@ -1,6 +1,13 @@
 import duckdb
+import os
 from modules import metadata
 from modules import parse_db_list
+from modules import fileio
+
+def create_db_dir(db_path):
+    if fileio.check_folder_in_path(db_path):
+        db_path = os.path.dirname(db_path)
+        os.makedirs(db_path, exist_ok=True)
 
 def create_and_attach_dbs():
     # Read the CSV file using pandas
@@ -11,10 +18,12 @@ def create_and_attach_dbs():
 
     # Attach primary databases
     for i, row in primary_dbs.iterrows():
+        create_db_dir(row['PATH'])
         con.execute(f"ATTACH DATABASE '{row['PATH']}' AS {row['DB_NAME']}")
 
     # Attach secondary databases as read only
     for i, row in secondary_dbs.iterrows():
+        create_db_dir(row['PATH'])
         con.execute(f"ATTACH DATABASE '{row['PATH']}' AS {row['DB_NAME']} (READ_ONLY)")
 
     attached = metadata.get_attached_dbs(con)
