@@ -1,4 +1,5 @@
 from modules import fileio
+from modules import datacleaning
 
 def readlist(csvpath):
     # Read the CSV file using pandas
@@ -7,9 +8,9 @@ def readlist(csvpath):
 
 def clean_db_list(df):
     print("Cleaning database list file...")
-    df_cleaned = df.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
+    df_cleaned = datacleaning.clean_whitespace_in_df(df)
     if (df_cleaned.equals(df) == False):
-        "Frame was cleaned to remove whitespace, please fix this in your list"
+        print("Frame was cleaned to remove whitespace, please fix this in your list")
     return df_cleaned
 
 def verify_if_any_duplicates(df):
