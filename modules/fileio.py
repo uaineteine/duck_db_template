@@ -20,3 +20,8 @@ def check_folder_in_filepath(path):
         else:
             #print(f"The path '{path}' does not appear to have a file extension.")
             return True
+        
+def create_filepath_dirs(path):
+    if check_folder_in_filepath(path):
+        path = os.path.dirname(path)
+        os.makedirs(path, exist_ok=True)

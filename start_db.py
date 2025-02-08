@@ -4,27 +4,22 @@ from modules import metadata
 from modules import parse_db_list
 from modules import fileio
 
-def create_db_dir(db_path):
-    if fileio.check_folder_in_filepath(db_path):
-        db_path = os.path.dirname(db_path)
-        os.makedirs(db_path, exist_ok=True)
-
 def create_and_attach_dbs():
     # Read the CSV file using pandas
     driver_name, all_names, primary_dbs, secondary_dbs = parse_db_list.parselist("db_list.csv")
 
     # Connect to the driver database
-    create_db_dir(driver_name)
+    fileio.create_filepath_dirs(driver_name)
     con = duckdb.connect(driver_name)
 
     # Attach primary databases
     for i, row in primary_dbs.iterrows():
-        create_db_dir(row['PATH'])
+        fileio.create_filepath_dirs(row['PATH'])
         con.execute(f"ATTACH DATABASE '{row['PATH']}' AS {row['DB_NAME']}")
 
     # Attach secondary databases as read only
     for i, row in secondary_dbs.iterrows():
-        create_db_dir(row['PATH'])
+        fileio.create_filepath_dirs(row['PATH'])
         con.execute(f"ATTACH DATABASE '{row['PATH']}' AS {row['DB_NAME']} (READ_ONLY)")
 
     attached = metadata.get_attached_dbs(con)
