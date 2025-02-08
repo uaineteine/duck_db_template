@@ -15,7 +15,7 @@ def attach_db(con, path, name, readonly=False):
 
 def create_and_attach_dbs():
     # Read the CSV file using pandas
-    driver_name, all_names, primary_dbs, secondary_dbs = parse_db_list.parselist("db_list.csv")
+    driver_name, all_names, primary_dbs, secondary_dbs = parse_db_list.parselist("init_tables/db_list.csv")
 
     # Connect to the driver database
     fileio.create_filepath_dirs(driver_name)
