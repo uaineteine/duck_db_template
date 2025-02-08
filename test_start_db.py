@@ -12,6 +12,6 @@ con.sql("CREATE TABLE IF NOT EXISTS a1.test (f INTEGER)")
 metadata.get_inventory(con).show()
 
 #attempt to make new tables
-init_tables_from_list.init_these_tables("init_tables/new_tables.csv")
+init_tables_from_list.init_these_tables(con, "init_tables/new_tables.csv")
 
 con.close()

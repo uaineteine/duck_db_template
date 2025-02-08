@@ -7,8 +7,20 @@ def read_table_list(path):
     df = pd.read_csv(path)
     return df
 
-def init_these_tables(new_table_list):
+def init_table(con, frame):
+    print(frame)
+
+def init_these_tables(con, new_table_list):
     df = read_table_list(new_table_list)
 
     distinct_tables = df[["DBNAME","TABLENAME"]].drop_duplicates()
-    print(distinct_tables.head())
+
+    for i, row in distinct_tables.iterrows():
+        DBNAME = row["DBNAME"]
+        TABLENAME = row["TABLENAME"]
+        #filter for this result
+        new_table_frame = df[df['DBNAME'] == DBNAME].drop(columns=["DBNAME"])
+        new_table_frame = new_table_frame[new_table_frame['TABLENAME'] == TABLENAME].drop(columns=["TABLENAME"])
+
+        print("Creating table " + DBNAME + "." + TABLENAME)
+        init_table(con, new_table_frame)
