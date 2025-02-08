@@ -3,6 +3,7 @@ import duckdb
 from modules import metadata
 from modules import parse_db_list
 from modules import fileio
+from modules import init_tables_from_list
 
 def attach_db(con, path, name, readonly=False):
     fileio.create_filepath_dirs(path)
@@ -41,4 +42,6 @@ def create_and_attach_dbs():
 
 def start_db():
     con = create_and_attach_dbs()
+    #attempt to make new tables
+    init_tables_from_list.init_these_tables(con, "init_tables/new_tables.csv")
     return con
