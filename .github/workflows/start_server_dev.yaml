@@ -1,9 +1,9 @@
-name: Test Launch
+name: Test Launch - dev
 
 on:
   push:
     branches:
-      - main
+      - develop
 
 jobs:
   run-duckdb-script:
