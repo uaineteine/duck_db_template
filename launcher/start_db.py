@@ -1,4 +1,4 @@
-print("[Uaine DB starter v1.2]")
+print("[Uaine DB starter v1.2.1]")
 import duckdb
 import pandas as pd
 from modules import metadata
