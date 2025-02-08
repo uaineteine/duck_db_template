@@ -9,14 +9,14 @@ def check_folder_in_filepath(path):
     dir_name = os.path.dirname(path)
     
     if dir_name == "":
-        print("No directory specified in the path.")
+        #print("No directory specified in the path.")
         return False
     else:
         # Check if the path has a file extension
         _, file_extension = os.path.splitext(dir_name)
         if file_extension:
-            print(f"The path '{path}' appears to be a file.")
+            #print(f"The path '{path}' appears to be a file.")
             return False
         else:
-            print(f"The path '{path}' does not appear to have a file extension.")
+            #print(f"The path '{path}' does not appear to have a file extension.")
             return True
