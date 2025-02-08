@@ -1,6 +1,6 @@
-# DUCK DB TEMPLATE v1.1.1
+# DUCK DB TEMPLATE v1.2
 
-Creates multiple partitioned databases based on a csv list supplied by the user. This allows manipulations to be handled and routed through the main driver and possible re-allocation and migration of different components.
+Creates multiple partitioned databases based on input list(s) (csv) supplied by the user. This allows manipulations to be handled and routed through the main driver and possible re-allocation and migration of different components.
 
 #### STATUS
 
@@ -10,6 +10,8 @@ Creates multiple partitioned databases based on a csv list supplied by the user.
 ### GET STARTED
 
 Modify the `db_list.csv` to outline your proposed multi-database structure and then run the start_db script. This will launch the server and return a connection for you to use. any uncreated directories will be produced automatically.
+
+Extend and only EXTEND the `def_tables.csv` list with your porposed schema and empty tables will be generated accordingly on DB start.
 
 There are three types of dbs you can use in this list:
 
@@ -21,5 +23,5 @@ I would recommend keeping this template as a dedicated sub-folder and importing 
 
 ### WHAT IT WILL NOT DO
 
-It will not create your initial data or tables. It is planned it will generate your tables and variable types from a csv.
+Function without the default tables made in the `def_tables.csv`. Please only append to this or use a 2nd csv.
 
