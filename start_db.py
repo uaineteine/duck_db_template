@@ -53,6 +53,12 @@ def start_db():
     if n == 0: #empty table, set this up
         newtime = {"START_TIME": now, "PREV_START_TIME" : ""}
         df.loc[n] = newtime
+    elif n==1:
+        oldtime = df["START_TIME"][0]
+        df["START_TIME"][0] = now
+        df["PREV_START_TIME"][0] = oldtime
+    else:
+        raise ValueError("main.LAST_START is broken, too many results")
 
     # Write the DataFrame back to DuckDB, overwriting the existing table
     con.execute("CREATE OR REPLACE TABLE main.LAST_START AS SELECT * FROM df")
