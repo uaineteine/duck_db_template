@@ -9,7 +9,7 @@ Creates multiple partitioned databases based on a csv list supplied by the user.
 
 ### GET STARTED
 
-Modify the `db_list.csv` to outline your proposed multi-database structure and then run the start_db script. This will launch the server and return a connection for you to use.
+Modify the `db_list.csv` to outline your proposed multi-database structure and then run the start_db script. This will launch the server and return a connection for you to use. any uncreated directories will be produced automatically.
 
 There are three types of dbs you can use in this list:
 
@@ -21,5 +21,5 @@ I would recommend keeping this template as a dedicated sub-folder and importing 
 
 ### WHAT IT WILL NOT DO
 
-It will not make folders and directories needed, which is a shame as adding new databases would be very easy. Hence this is a planned feature.
+It will not create your initial data or tables. It is planned it will generate your tables and variable types from a csv.
 
