@@ -1,3 +1,4 @@
+print("[Uaine DB starter v1.2]")
 import duckdb
 from modules import metadata
 from modules import parse_db_list
