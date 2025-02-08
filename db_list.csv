@@ -1,5 +1,5 @@
 PATH|DB_NAME|PURPOSE
-"DBDAT/haupt.db"|haupt|main
+"DBDAT/main.db"|main|main
 "DBDAT/users.db"|users|primary
 "DBDAT/models.db"|models|primary
 "DBDAT/annex1.db"|a1|primary

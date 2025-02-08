@@ -1,5 +1,6 @@
 print("[Uaine DB starter v1.2]")
 import duckdb
+import pandas as pd
 from modules import metadata
 from modules import parse_db_list
 from modules import fileio
@@ -44,4 +45,15 @@ def start_db():
     con = create_and_attach_dbs()
     #attempt to make new tables
     init_tables_from_list.init_these_tables(con, "init_tables/def_tables.csv")
+
+    #read out the system time and update it necessary
+    now = metadata.getCurrentTimeForDuck(timezone_included=True)
+    df = con.sql("SELECT * from main.LAST_START").df()
+    n = len(df)
+    if n == 0: #empty table, set this up
+        newtime = {"START_TIME": now, "PREV_START_TIME" : ""}
+        df.loc[n] = newtime
+
+    # Write the DataFrame back to DuckDB, overwriting the existing table
+    con.execute("CREATE OR REPLACE TABLE main.LAST_START AS SELECT * FROM df")
     return con
