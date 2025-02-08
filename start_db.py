@@ -1,5 +1,6 @@
 import duckdb
-from modules import *
+from modules import metadata
+from modules import parse_db_list
 
 def create_and_attach_dbs():
     # Read the CSV file using pandas
