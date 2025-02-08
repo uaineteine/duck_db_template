@@ -1,4 +1,8 @@
 import os
+import pandas as pd
+
+def read_psv(path):
+    return pd.read_csv(path, delimiter='|')
 
 def check_folder_in_path(path):
     # Get the directory name of the path

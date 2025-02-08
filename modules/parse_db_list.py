@@ -1,8 +1,8 @@
-import pandas as pd
+from modules import fileio
 
 def readlist(csvpath):
     # Read the CSV file using pandas
-    df = pd.read_csv(csvpath, delimiter='|')
+    df = fileio.read_psv(csvpath)
     return df
 
 def clean_db_list(df):
