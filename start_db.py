@@ -5,7 +5,7 @@ from modules import parse_db_list
 from modules import fileio
 
 def create_db_dir(db_path):
-    if fileio.check_folder_in_path(db_path):
+    if fileio.check_folder_in_filepath(db_path):
         db_path = os.path.dirname(db_path)
         os.makedirs(db_path, exist_ok=True)
 
@@ -14,6 +14,7 @@ def create_and_attach_dbs():
     driver_name, all_names, primary_dbs, secondary_dbs = parse_db_list.parselist("db_list.csv")
 
     # Connect to the driver database
+    create_db_dir(driver_name)
     con = duckdb.connect(driver_name)
 
     # Attach primary databases

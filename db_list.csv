@@ -1,6 +1,6 @@
 PATH|DB_NAME|PURPOSE
-"haupt.db"|haupt|main
-"users.db"|users|primary
-"models.db"|models|primary
-"annex1.db"|a1|primary
-"annex2.db"|a2|primary
+"DBDAT/haupt.db"|haupt|main
+"DBDAT/users.db"|users|primary
+"DBDAT/models.db"|models|primary
+"DBDAT/annex1.db"|a1|primary
+"DBDAT/annex2.db"|a2|primary
