@@ -21,3 +21,6 @@ def getCurrentTimeForDuck(timezone_included=False):
         return datetime.now().strftime('%Y-%m-%d %H:%M:%S %z')
     #else:
     return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+def get_last_launch_times(con):
+    return con.sql("SELECT * from main.LAST_START").df()

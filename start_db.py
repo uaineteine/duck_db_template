@@ -1,4 +1,4 @@
-print("[Uaine DB starter v1.2]")
+print("[Uaine DB starter template]")
 import duckdb
 import pandas as pd
 from modules import metadata
@@ -48,7 +48,7 @@ def start_db():
 
     #read out the system time and update it necessary
     now = metadata.getCurrentTimeForDuck(timezone_included=True)
-    df = con.sql("SELECT * from main.LAST_START").df()
+    df = metadata.get_last_launch_times(con)
     n = len(df)
     if n == 0: #empty table, set this up
         newtime = {"START_TIME": now, "PREV_START_TIME" : ""}

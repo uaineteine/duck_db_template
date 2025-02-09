@@ -1,4 +1,4 @@
-# DUCK DB TEMPLATE v1.2
+# DUCK DB TEMPLATE v1.2.1
 
 Creates multiple partitioned databases based on input list(s) (csv) supplied by the user. This allows manipulations to be handled and routed through the main driver and possible re-allocation and migration of different components.
 
