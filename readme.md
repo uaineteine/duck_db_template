@@ -1,4 +1,4 @@
-# DUCK DB TEMPLATE v1.2.1
+# DUCK DB TEMPLATE v1.2.2
 
 Creates multiple partitioned databases based on input list(s) (csv) supplied by the user. This allows manipulations to be handled and routed through the main driver and possible re-allocation and migration of different components.
 
@@ -25,3 +25,6 @@ I would recommend keeping this template as a dedicated sub-folder and importing 
 
 Function without the default tables made in the `def_tables.csv`. Please only append to this or use a 2nd csv.
 
+#### What we want it to do
+
+Automaticlaly produce an svg chart of data items

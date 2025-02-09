@@ -6,6 +6,6 @@ con = sdb.start_db()
 #return the table list
 metadata.get_inventory(con).show()
 
-print(con.sql("SELECT * from main.LAST_START"))
+print(con.sql("SELECT * from main.META"))
 
 con.close()

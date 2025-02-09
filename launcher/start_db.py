@@ -6,9 +6,6 @@ from modules import parse_db_list
 from modules import fileio
 from modules import init_tables_from_list
 
-DB_VER = "1.2.2"
-print(DB_VER)
-
 def attach_db(con, path, name, readonly=False):
     fileio.create_filepath_dirs(path)
     ex_string = f"ATTACH DATABASE '{path}' AS {name}"
@@ -54,7 +51,7 @@ def start_db():
     df = metadata.get_last_launch_times(con)
     n = len(df)
     if n == 0: #empty table, set this up
-        newtime = {"START_TIME": now, "PREV_START_TIME" : "", "DB_VERSION" : DB_VER}
+        newtime = {"START_TIME": now, "PREV_START_TIME" : ""}
         df.loc[n] = newtime
     elif n==1:
         oldtime = df["START_TIME"][0]

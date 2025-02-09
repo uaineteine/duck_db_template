@@ -25,4 +25,5 @@ jobs:
 
       - name: Run script
         run: |
+          cd launcher
           python example_start.py 
