@@ -9,6 +9,14 @@ Creates multiple partitioned databases based on input list(s) (csv) supplied by 
 
 ### GET STARTED
 
+Install package dependencies found in `requirements.txt`. This can be installed via
+
+```
+pip install -r requirements.txt
+```
+
+### USAGE
+
 Modify the `db_list.csv` to outline your proposed multi-database structure and then run the start_db script. This will launch the server and return a connection for you to use. any uncreated directories will be produced automatically.
 
 Extend and only EXTEND the `def_tables.csv` list with your porposed schema and empty tables will be generated accordingly on DB start.
