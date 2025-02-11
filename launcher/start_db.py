@@ -55,9 +55,6 @@ def start_db():
     con = create_and_attach_dbs()
     #attempt to make new tables
     init_tables_from_list.init_these_tables(con, "init_tables/def_tables.csv")
-    
-    #check db_versions
-    check_db_version(con)
 
     #read out the system time and update it necessary
     now = duckdata.getCurrentTimeForDuck(timezone_included=True)
@@ -72,6 +69,9 @@ def start_db():
         df["PREV_START_TIME"][0] = oldtime
     else:
         raise ValueError("main.META is broken, too many results")
+    
+    #check db_versions
+    check_db_version(con)
 
     # Write the DataFrame back to DuckDB, overwriting the existing table
     con.execute("CREATE OR REPLACE TABLE main.META AS SELECT * FROM df")
