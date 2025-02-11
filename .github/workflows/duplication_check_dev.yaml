@@ -2,6 +2,8 @@ name: Dup Checks - dev
 
 on:
   pull_request:
+    branches:
+      - development
   push:
     branches:
       - development
