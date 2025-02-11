@@ -5,7 +5,7 @@ Creates multiple partitioned databases based on input list(s) (csv) supplied by 
 #### STATUS
 
 
-[![Lint Check](https://github.com/uaineteine/duck_db_template/actions/workflows/lint_check_dev.yaml/badge.svg)](https://github.com/uaineteine/duck_db_template/actions/workflows/lint_check.yaml) [![Pycheck](https://github.com/uaineteine/duck_db_template/actions/workflows/pycheck.yaml/badge.svg)](https://github.com/uaineteine/duck_db_template/actions/workflows/pycheck.yaml) [![Test Launch](https://github.com/uaineteine/duck_db_template/actions/workflows/start_server.yaml/badge.svg)](https://github.com/uaineteine/duck_db_template/actions/workflows/start_server.yaml) [![Dup Checks](https://github.com/uaineteine/duck_db_template/actions/workflows/duplication_check.yaml/badge.svg)](https://github.com/uaineteine/duck_db_template/actions/workflows/duplication_check.yaml)
+[![Lint Check](https://github.com/uaineteine/duck_db_template/actions/workflows/lint_check.yaml/badge.svg)](https://github.com/uaineteine/duck_db_template/actions/workflows/lint_check.yaml) [![Pycheck](https://github.com/uaineteine/duck_db_template/actions/workflows/pycheck.yaml/badge.svg)](https://github.com/uaineteine/duck_db_template/actions/workflows/pycheck.yaml) [![Test Launch](https://github.com/uaineteine/duck_db_template/actions/workflows/start_server.yaml/badge.svg)](https://github.com/uaineteine/duck_db_template/actions/workflows/start_server.yaml) [![Dup Checks](https://github.com/uaineteine/duck_db_template/actions/workflows/duplication_check.yaml/badge.svg)](https://github.com/uaineteine/duck_db_template/actions/workflows/duplication_check.yaml)
 
 DEVELOPMENT:
 
