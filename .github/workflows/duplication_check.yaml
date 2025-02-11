@@ -1,0 +1,30 @@
+name: Duplication Checks
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  duplicate-code-check:
+    name: Check for duplicate code
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install jscpd
+        run: npm install -g jscpd
+
+      - name: Check Python Duplications
+        run: jscpd --pattern "**/*.py" --threshold 10
+
+      - name: Check YAML Duplications
+        run: jscpd --pattern "**/*.yaml" --threshold 10
