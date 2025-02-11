@@ -1,10 +1,13 @@
-# DUCK DB TEMPLATE v1.2.2
+# DUCK DB TEMPLATE v1.2.3
 
 Creates multiple partitioned databases based on input list(s) (csv) supplied by the user. This allows manipulations to be handled and routed through the main driver and possible re-allocation and migration of different components.
 
 #### STATUS
 
 [![Test Launch](https://github.com/uaineteine/duck_db_template/actions/workflows/start_server.yaml/badge.svg)](https://github.com/uaineteine/duck_db_template/actions/workflows/start_server.yaml)
+
+DEVELOPMENT:
+
 [![Test Launch - dev](https://github.com/uaineteine/duck_db_template/actions/workflows/start_server_dev.yaml/badge.svg)](https://github.com/uaineteine/duck_db_template/actions/workflows/start_server_dev.yaml)
 
 ### GET STARTED
