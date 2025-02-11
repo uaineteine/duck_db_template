@@ -4,8 +4,12 @@ Creates multiple partitioned databases based on input list(s) (csv) supplied by 
 
 #### STATUS
 
-[![Test Launch](https://github.com/uaineteine/duck_db_template/actions/workflows/start_server.yaml/badge.svg)](https://github.com/uaineteine/duck_db_template/actions/workflows/start_server.yaml)
-[![Test Launch - dev](https://github.com/uaineteine/duck_db_template/actions/workflows/start_server_dev.yaml/badge.svg)](https://github.com/uaineteine/duck_db_template/actions/workflows/start_server_dev.yaml)
+
+[![Lint Check](https://github.com/uaineteine/duck_db_template/actions/workflows/lint_check_dev.yaml/badge.svg)](https://github.com/uaineteine/duck_db_template/actions/workflows/lint_check.yaml) [![Pycheck](https://github.com/uaineteine/duck_db_template/actions/workflows/pycheck.yaml/badge.svg)](https://github.com/uaineteine/duck_db_template/actions/workflows/pycheck.yaml) [![Test Launch](https://github.com/uaineteine/duck_db_template/actions/workflows/start_server.yaml/badge.svg)](https://github.com/uaineteine/duck_db_template/actions/workflows/start_server.yaml) [![Dup Checks](https://github.com/uaineteine/duck_db_template/actions/workflows/duplication_check.yaml/badge.svg)](https://github.com/uaineteine/duck_db_template/actions/workflows/duplication_check.yaml)
+
+DEVELOPMENT:
+
+[![Lint Check - dev](https://github.com/uaineteine/duck_db_template/actions/workflows/lint_check_dev.yaml/badge.svg)](https://github.com/uaineteine/duck_db_template/actions/workflows/lint_check_dev.yaml) [![Pycheck - dev](https://github.com/uaineteine/duck_db_template/actions/workflows/pycheck.yaml/badge.svg)](https://github.com/uaineteine/duck_db_template/actions/workflows/lint_check_dev.yaml) [![Test Launch - dev](https://github.com/uaineteine/duck_db_template/actions/workflows/start_server_dev.yaml/badge.svg)](https://github.com/uaineteine/duck_db_template/actions/workflows/start_server_dev.yaml) [![Dup Checks - dev](https://github.com/uaineteine/duck_db_template/actions/workflows/duplication_check_dev.yaml/badge.svg)](https://github.com/uaineteine/duck_db_template/actions/workflows/duplication_check_dev.yaml)
 
 ### GET STARTED
 
