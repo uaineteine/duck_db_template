@@ -1,4 +1,4 @@
-name: Duplication Checks - dev
+name: Dup Checks - dev
 
 on:
   pull_request:
