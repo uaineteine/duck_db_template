@@ -12,7 +12,7 @@ def get_db_version(con):
     return df["DB_VERSION"][0]
 
 def db_version_match(con, expecting_version):
-    ver = get_db_version()
+    ver = get_db_version(con)
     if (ver == expecting_version):
         return True
     #else
