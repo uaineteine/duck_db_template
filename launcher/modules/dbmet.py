@@ -13,7 +13,7 @@ def get_db_version(con):
 
 def db_version_match(con, expecting_version):
     ver = get_db_version()
-    if (ver == expecting_version)
+    if (ver == expecting_version):
         return True
     #else
     return False
