@@ -7,7 +7,7 @@ from modules import dbmet
 from modules import parse_db_list
 from modules import init_tables_from_list
 
-DB_VER = "1.2.2"
+DB_VER = "1.2.3"
 print(DB_VER)
 
 def attach_db(con, path, name, readonly=False):
@@ -45,6 +45,12 @@ def create_and_attach_dbs():
 
     return con
 
+def check_db_version(con):
+    if (dbmet.db_version_match(con, DB_VER) == False):
+        print("WARNING: Database version mismatch")
+        print("Database version is: " + dbmet.get_db_version(con))
+        print("Expecting version " + DB_VER)
+
 def start_db():
     con = create_and_attach_dbs()
     #attempt to make new tables
@@ -52,13 +58,13 @@ def start_db():
 
     #read out the system time and update it necessary
     now = duckdata.getCurrentTimeForDuck(timezone_included=True)
-    df = dbmet.get_last_launch_times(con)
+    df = dbmet.get_meta_table(con)
     n = len(df)
     if n == 0: #empty table, set this up
         newtime = {"START_TIME": now, "PREV_START_TIME" : "", "DB_VERSION" : str(DB_VER)}
         df.loc[n] = newtime
     elif n==1:
-        oldtime = df["START_TIME"][0]
+        oldtime = dbmet.get_last_launch_time(con)
         df["START_TIME"][0] = now
         df["PREV_START_TIME"][0] = oldtime
     else:
@@ -66,4 +72,8 @@ def start_db():
 
     # Write the DataFrame back to DuckDB, overwriting the existing table
     con.execute("CREATE OR REPLACE TABLE main.META AS SELECT * FROM df")
+
+    #check db_versions
+    check_db_version(con)
+    
     return con
