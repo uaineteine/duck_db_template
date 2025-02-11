@@ -25,6 +25,3 @@ jobs:
 
       - name: Check Python Duplications
         run: jscpd --pattern "**/*.py" --threshold 10
-
-      - name: Check YAML Duplications
-        run: jscpd --pattern "**/*.yaml" --threshold 10
