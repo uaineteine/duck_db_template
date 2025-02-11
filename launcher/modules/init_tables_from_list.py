@@ -1,5 +1,5 @@
 import pandas as pd
-from modules import metadata
+from uainepydat import duckdata
 
 #read in master list
 def read_table_list(path):
@@ -9,7 +9,7 @@ def read_table_list(path):
 def init_table(con, frame, db, tablename):
     #takes in a frame of string columns VARNAME and TYPE
     #those formats should be duckDB compatible
-    exist = metadata.does_table_exist(con, db, tablename)
+    exist = duckdata.does_table_exist(con, db, tablename)
     if (exist == False):
         print("Creating table " + db + "." + tablename)
 
