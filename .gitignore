@@ -1,3 +1,4 @@
 *db
 __pycache__/*
-modules/__pycache__/*
+launcher/modules/__pycache__/*
+launcher/__pycache__/*

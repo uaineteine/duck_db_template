@@ -1,5 +1,5 @@
-from modules import fileio
-from modules import datacleaning
+from uainepydat import fileio
+from uainepydat import dataclean
 
 def readlist(csvpath):
     # Read the CSV file using pandas
@@ -8,7 +8,7 @@ def readlist(csvpath):
 
 def clean_db_list(df):
     print("Cleaning database list file...")
-    df_cleaned = datacleaning.clean_whitespace_in_df(df)
+    df_cleaned = dataclean.clean_whitespace_in_df(df)
     if (df_cleaned.equals(df) == False):
         print("Frame was cleaned to remove whitespace, please fix this in your list")
     return df_cleaned

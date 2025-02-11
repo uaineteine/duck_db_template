@@ -1,4 +1,4 @@
-# DUCK DB TEMPLATE v1.2.1
+# DUCK DB TEMPLATE v1.2.2
 
 Creates multiple partitioned databases based on input list(s) (csv) supplied by the user. This allows manipulations to be handled and routed through the main driver and possible re-allocation and migration of different components.
 
@@ -8,6 +8,14 @@ Creates multiple partitioned databases based on input list(s) (csv) supplied by 
 [![Test Launch - dev](https://github.com/uaineteine/duck_db_template/actions/workflows/start_server_dev.yaml/badge.svg)](https://github.com/uaineteine/duck_db_template/actions/workflows/start_server_dev.yaml)
 
 ### GET STARTED
+
+Install package dependencies found in `requirements.txt`. This can be installed via
+
+```
+pip install -r requirements.txt
+```
+
+### USAGE
 
 Modify the `db_list.csv` to outline your proposed multi-database structure and then run the start_db script. This will launch the server and return a connection for you to use. any uncreated directories will be produced automatically.
 
