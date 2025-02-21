@@ -1,9 +1,9 @@
-from uainepydat import fileio
+from uainepydat import dataio
 from uainepydat import dataclean
 
 def readlist(csvpath):
     # Read the CSV file using pandas
-    df = fileio.read_psv(csvpath)
+    df = dataio.read_flat_psv(csvpath)
     return df
 
 def clean_db_list(df):
