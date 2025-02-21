@@ -1,5 +1,5 @@
 import pandas as pd
-from uainepydat import duckfunc
+from uainepydat import duckdata
 
 #read in master list
 def read_table_list(path):
@@ -18,4 +18,4 @@ def init_these_tables(con, new_table_list):
         new_table_frame = df[df['DBNAME'] == DBNAME].drop(columns=["DBNAME"])
         new_table_frame = new_table_frame[new_table_frame['TABLENAME'] == TABLENAME].drop(columns=["TABLENAME"])
 
-        duckfunc.init_table(con, new_table_frame, DBNAME, TABLENAME)
+        duckdata.init_table(con, new_table_frame, DBNAME, TABLENAME)
