@@ -12,6 +12,8 @@ DEVELOPMENT:
 
 ### GET STARTED
 
+* Python 3.9 or above is required
+
 Install package dependencies found in `requirements.txt`. This can be installed via
 
 ```
