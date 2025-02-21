@@ -1,10 +1,10 @@
-from uainepydat import duckdata
+from uainepydat import duckfunc
 import start_db as sdb
 
 con = sdb.start_db()
 
 #return the table list
-duckdata.get_inventory(con).show()
+duckfunc.get_inventory(con).show()
 
 print(con.sql("SELECT * from main.META"))
 
