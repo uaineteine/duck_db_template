@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - 'development'
+      - develop
   pull_request:
     branches:
       - 'development'
+      - develop
 
 jobs:
   lint:

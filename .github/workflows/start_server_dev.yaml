@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - development
 
 jobs:
   run-duckdb-script:
