@@ -1,4 +1,5 @@
 print("[Uaine DB starter template]")
+import os
 import duckdb
 import pandas as pd
 from uainepydat import duckfunc
@@ -7,7 +8,7 @@ from modules import dbmet
 from modules import parse_db_list
 from modules import init_tables_from_list
 
-DB_VER = "1.2.4"
+DB_VER = "1.2.5"
 print(DB_VER)
 
 def attach_db(con, path, name, readonly=False):
@@ -17,9 +18,9 @@ def attach_db(con, path, name, readonly=False):
         ex_string += " (READ_ONLY)"
     con.execute(ex_string)
 
-def create_and_attach_dbs():
+def create_and_attach_dbs(launcher_loc="."):
     # Read the CSV file using pandas
-    driver_name, all_names, primary_dbs, secondary_dbs = parse_db_list.parselist("init_tables/db_list.csv")
+    driver_name, all_names, primary_dbs, secondary_dbs = parse_db_list.parselist(os.path.join(launcher_loc,"init_tables/db_list.csv"))
 
     # Connect to the driver database
     fileio.create_filepath_dirs(driver_name)
@@ -51,10 +52,10 @@ def check_db_version(con):
         print("Database version is: " + dbmet.get_db_version(con))
         print("Expecting version " + DB_VER)
 
-def start_db():
-    con = create_and_attach_dbs()
+def start_db(launcher_loc="."):
+    con = create_and_attach_dbs(launcher_loc=launcher_loc)
     #attempt to make new tables
-    init_tables_from_list.init_these_tables(con, "init_tables/def_tables.csv")
+    init_tables_from_list.init_these_tables(con, os.path.join(launcher_loc,"init_tables/def_tables.csv"))
 
     #read out the system time and update it necessary
     now = duckfunc.getCurrentTimeForDuck(timezone_included=True)
