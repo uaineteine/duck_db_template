@@ -1,3 +1,3 @@
 duckdb
 pandas
-uainepydat==0.9.1
+uainepydat==0.10
