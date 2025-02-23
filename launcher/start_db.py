@@ -8,7 +8,7 @@ from modules import dbmet
 from modules import parse_db_list
 from modules import init_tables_from_list
 
-DB_VER = "1.2.5"
+DB_VER = "1.2.6"
 print(DB_VER)
 
 def attach_db(con, path, name, readonly=False):
