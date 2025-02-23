@@ -1,13 +1,9 @@
 import pandas as pd
+from uainepydat import dataio
 from uainepydat import duckfunc
 
-#read in master list
-def read_table_list(path):
-    df = pd.read_csv(path)
-    return df
-
 def init_these_tables(con, new_table_list):
-    df = read_table_list(new_table_list)
+    df = dataio.read_flat_df(new_table_list)
 
     distinct_tables = df[["DBNAME","TABLENAME"]].drop_duplicates()
 
