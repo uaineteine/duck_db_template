@@ -2,7 +2,7 @@
 
 Creates multiple partitioned databases based on input list(s) (csv) supplied by the user. This allows manipulations to be handled and routed through the main driver and possible re-allocation and migration of different components.
 
-![Version 1.2.6](https://img.shields.io/badge/version-1.2.6-brightgreen)
+![Version 1.2.7](https://img.shields.io/badge/version-1.2.7-brightgreen)
 
 #### STATUS 
 
