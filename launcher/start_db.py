@@ -1,5 +1,4 @@
 print("[Uaine DB starter template]")
-import os
 import duckdb
 from uainepydat import fileio
 from uainepydat import dataio
