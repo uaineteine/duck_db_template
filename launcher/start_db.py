@@ -66,8 +66,8 @@ def init_tables_from_list(con, new_table_list):
         duckfunc.init_table(con, new_table_frame, DBNAME, TABLENAME)
 
 
-def start_db(launcher_loc=".", def_tables_path="init_tables/db_list.csv"):
-    con = create_and_attach_dbs(launcher_loc)
+def start_db(def_tables_path="init_tables/db_list.csv"):
+    con = create_and_attach_dbs(def_tables_path)
     #attempt to make new tables
     init_tables_from_list(con, def_tables_path)
 
