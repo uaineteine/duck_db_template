@@ -4,8 +4,9 @@ import duckdb
 from uainepydat import fileio
 from uainepydat import dataio
 from uainepydat import duckfunc
-from modules import dbmet
-from modules import parse_db_list
+#modules
+import dbmet
+import parse_db_list
 
 DB_VER = "1.2.7"
 print(DB_VER)
