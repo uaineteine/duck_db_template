@@ -1,11 +1,6 @@
 from uainepydat import dataio
 from uainepydat import dataclean
 
-def readlist(csvpath):
-    # Read the CSV file using pandas
-    df = dataio.read_flat_psv(csvpath)
-    return df
-
 def clean_db_list(df):
     print("Cleaning database list file...")
     df_cleaned = dataclean.clean_whitespace_in_df(df)
@@ -30,7 +25,7 @@ def verify_if_1_maindb(df):
 
 def parselist(csvpath):
     print("Parsing database list file...")
-    df = clean_db_list(readlist(csvpath))
+    df = clean_db_list(dataio.read_flat_psv(csvpath))
 
     #check for duplicated names
     all_names = verify_if_any_duplicates(df)
