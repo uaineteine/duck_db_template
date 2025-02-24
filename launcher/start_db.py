@@ -1,4 +1,5 @@
 print("[Uaine DB starter template]")
+import os
 import duckdb
 from uainepydat import fileio
 from uainepydat import dataio
@@ -19,7 +20,8 @@ def attach_db(con, path, name, readonly=False):
 
 def create_and_attach_dbs(def_tables_path):
     # Read the CSV file using pandas
-    driver_name, all_names, primary_dbs, secondary_dbs = parse_db_list.parselist(def_tables_path)
+    dblist = os.path.join(def_tables_path, "db_list.csv")
+    driver_name, all_names, primary_dbs, secondary_dbs = parse_db_list.parselist(dblist)
 
     # Connect to the driver database
     fileio.create_filepath_dirs(driver_name)
@@ -66,10 +68,10 @@ def init_tables_from_list(con, new_table_list):
         duckfunc.init_table(con, new_table_frame, DBNAME, TABLENAME)
 
 
-def start_db(def_tables_path="init_tables/db_list.csv"):
+def start_db(def_tables_path="init_tables"):
     con = create_and_attach_dbs(def_tables_path)
     #attempt to make new tables
-    init_tables_from_list(con, def_tables_path)
+    init_tables_from_list(con, os.path.join(def_tables_path, "def_tables.csv"))
 
     #read out the system time and update it necessary
     now = duckfunc.getCurrentTimeForDuck(timezone_included=True)
