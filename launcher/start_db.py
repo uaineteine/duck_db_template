@@ -67,7 +67,7 @@ def init_tables_from_list(con, new_table_list):
 
 
 def start_db(launcher_loc=".", def_tables_path="init_tables/db_list.csv"):
-    con = create_and_attach_dbs(launcher_loc=launcher_loc)
+    con = create_and_attach_dbs(launcher_loc)
     #attempt to make new tables
     init_tables_from_list(con, def_tables_path)
 
