@@ -8,7 +8,7 @@ from uainepydat import duckfunc
 import dbmet
 import parse_db_list
 
-DB_VER = "1.2.7"
+DB_VER = "1.2.7.1"
 print(DB_VER)
 
 def attach_db(con, path, name, readonly=False):
