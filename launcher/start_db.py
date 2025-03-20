@@ -1,6 +1,7 @@
 print("[Uaine DB starter template]")
 import os
 import duckdb
+import sys
 from uainepydat import fileio
 from uainepydat import dataio
 from uainepydat import duckfunc
@@ -8,7 +9,7 @@ from uainepydat import duckfunc
 import dbmet
 import parse_db_list
 
-DB_VER = "1.2.7.1"
+DB_VER = "1.2.8"
 print(DB_VER)
 
 def attach_db(con, path, name, readonly=False):
@@ -78,12 +79,20 @@ def start_db(def_tables_path="init_tables"):
     df = dbmet.get_meta_table(con)
     n = len(df)
     if n == 0: #empty table, set this up
-        newtime = {"START_TIME": now, "PREV_START_TIME" : "", "DB_VERSION" : str(DB_VER)}
+        newtime = {
+            "START_TIME": now, 
+            "PREV_START_TIME" : "", 
+            "DB_VERSION" : str(DB_VER),
+            "PYTHON_VERSION": sys.version.split()[0],
+            "DUCKDB_VERSION": duckdb.__version__
+        }
         df.loc[n] = newtime
     elif n==1:
         oldtime = dbmet.get_last_launch_time(con)
         df["START_TIME"][0] = now
         df["PREV_START_TIME"][0] = oldtime
+        df["PYTHON_VERSION"][0] = sys.version.split()[0]
+        df["DUCKDB_VERSION"][0] = duckdb.__version__
     else:
         raise ValueError("main.META is broken, too many results")
 
