@@ -36,6 +36,26 @@ There are three types of dbs you can use in this list:
 
 I would recommend keeping this template as a dedicated sub-folder and importing the start_db script from another module.
 
+### UI FEATURE
+
+The system includes a basic UI interface that can be launched using the `launch_ui.bat` script. This script will:
+
+1. Read the database configuration from `db_list.csv`
+2. Generate SQL statements to attach all databases
+3. Launch DuckDB with the UI interface and execute the generated SQL statements
+
+To use the UI feature, simply run the `launch_ui.bat` script from your command line.
+
+### SECURITY FEATURES
+
+The system includes a salt check mechanism to verify database integrity:
+
+* A unique salt value is generated and stored in the META table during the first database launch
+* On subsequent launches, the system verifies that the stored salt value matches the current calculation
+* If a mismatch is detected, the system will raise an error to prevent potential integrity issues
+
+This feature helps ensure that your database configuration hasn't been tampered with between sessions.
+
 ### WHAT IT WILL NOT DO
 
 Function without the default tables made in the `def_tables.csv`. Please only append to this or use a 2nd csv.
