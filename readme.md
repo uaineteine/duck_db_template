@@ -2,7 +2,7 @@
 
 Creates multiple partitioned databases based on input list(s) (csv) supplied by the user. This allows manipulations to be handled and routed through the main driver and possible re-allocation and migration of different components.
 
-![Version 1.2.8](https://img.shields.io/badge/version-1.2.8-brightgreen)
+![Version 1.4](https://img.shields.io/badge/version-1.4-brightgreen)
 
 #### STATUS 
 
@@ -35,6 +35,26 @@ There are three types of dbs you can use in this list:
 * The secondary dbs are a read-only connection to a path, this intended for additional instances or hosts of the DB.
 
 I would recommend keeping this template as a dedicated sub-folder and importing the start_db script from another module.
+
+### UI FEATURE
+
+The system includes a basic UI interface that can be launched using the `launch_ui.bat` script. This script will:
+
+1. Read the database configuration from `db_list.csv`
+2. Generate SQL statements to attach all databases
+3. Launch DuckDB with the UI interface and execute the generated SQL statements
+
+To use the UI feature, simply run the `launch_ui.bat` script from your command line.
+
+### SECURITY FEATURES
+
+The system includes a salt check mechanism to verify database integrity:
+
+* A unique salt value is generated and stored in the META table during the first database launch
+* On subsequent launches, the system verifies that the stored salt value matches the current calculation
+* If a mismatch is detected, the system will raise an error to prevent potential integrity issues
+
+This feature helps ensure that your database configuration hasn't been tampered with between sessions.
 
 ### WHAT IT WILL NOT DO
 
