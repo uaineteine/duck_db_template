@@ -1,7 +1,7 @@
 from datetime import datetime
 
 def get_meta_table(con):
-    return con.sql("SELECT * from main.META").df()
+    return con.sql("SELECT * from meta.META").df()
 
 def get_last_launch_time(con):
     df = get_meta_table(con)

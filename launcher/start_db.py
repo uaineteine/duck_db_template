@@ -8,8 +8,9 @@ from uainepydat import duckfunc
 #modules
 import dbmet
 import parse_db_list
+import db_hash
 
-DB_VER = "1.2.8"
+DB_VER = "1.4"
 print(DB_VER)
 
 def attach_db(con, path, name, readonly=False):
@@ -68,6 +69,28 @@ def init_tables_from_list(con, new_table_list):
 
         duckfunc.init_table(con, new_table_frame, DBNAME, TABLENAME)
 
+def salt_checking(con) -> bool:
+    """
+    Checks if the SALT_CHECK value in the META table matches the current hashed salt.
+    
+    Args:
+        con: DuckDB connection object.
+    
+    Returns:
+        bool: True if the SALT_CHECK value matches the current hashed salt, False otherwise.
+    """
+    # Get the SALT_CHECK value from the META table
+    df = con.execute("SELECT SALT_CHECK FROM meta.META").fetchdf()
+    if df.empty:
+        return False  # No SALT_CHECK value found
+    
+    stored_salt_check = df["SALT_CHECK"].iloc[0]
+    
+    # Generate the current SALT_CHECK value
+    current_salt_check = db_hash.generate_salt_check()
+    
+    # Compare the stored and current values
+    return stored_salt_check == current_salt_check
 
 def start_db(def_tables_path="init_tables"):
     con = create_and_attach_dbs(def_tables_path)
@@ -84,22 +107,32 @@ def start_db(def_tables_path="init_tables"):
             "PREV_START_TIME" : "", 
             "DB_VERSION" : str(DB_VER),
             "PYTHON_VERSION": sys.version.split()[0],
-            "DUCKDB_VERSION": duckdb.__version__
+            "DUCKDB_VERSION": duckdb.__version__,
+            "SALT_CHECK": db_hash.generate_salt_check()  # Generate new SALT_CHECK for empty table
         }
         df.loc[n] = newtime
     elif n==1:
         oldtime = dbmet.get_last_launch_time(con)
+        # Extract the existing SALT_CHECK value
+        existing_salt_check = df["SALT_CHECK"][0]
+        # Update other fields
         df["START_TIME"][0] = now
         df["PREV_START_TIME"][0] = oldtime
         df["PYTHON_VERSION"][0] = sys.version.split()[0]
         df["DUCKDB_VERSION"][0] = duckdb.__version__
+        # Preserve the existing SALT_CHECK value
+        df["SALT_CHECK"][0] = existing_salt_check
     else:
-        raise ValueError("main.META is broken, too many results")
+        raise ValueError("meta.META is broken, too many results")
 
     # Write the DataFrame back to DuckDB, overwriting the existing table
-    con.execute("CREATE OR REPLACE TABLE main.META AS SELECT * FROM df")
+    con.execute("CREATE OR REPLACE TABLE meta.META AS SELECT * FROM df")
 
     #check db_versions
     check_db_version(con)
+
+    # Check the SALT_CHECK value
+    if not salt_checking(con):
+        raise ValueError("SALT_CHECK value mismatch. Potential integrity issue detected.")
     
     return con

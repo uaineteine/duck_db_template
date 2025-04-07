@@ -15,11 +15,11 @@ def verify_if_any_duplicates(df):
     
     return all_names
 
-def verify_if_1_maindb(df):
+def verify_if_1_metadb(df):
     driver_names = df[df['PURPOSE'] == 'main']['PATH']
     n_names = driver_names.shape[0]
     if n_names > 1:
-        raise ValueError("DB_LIST can only contain 1 main database")
+        raise ValueError("DB_LIST can only contain 1 meta database")
 
     return driver_names[0]
 
@@ -31,7 +31,7 @@ def parselist(csvpath):
     all_names = verify_if_any_duplicates(df)
 
     #get the driver name
-    driver_name = verify_if_1_maindb(df)
+    driver_name = verify_if_1_metadb(df)
 
     primary_dbs = df[df['PURPOSE'] == 'primary'] # Filter for primary databases
     secondary_dbs = df[df['PURPOSE'] == 'secondary'] # Filter for secondary databases
