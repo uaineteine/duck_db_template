@@ -80,7 +80,7 @@ def salt_checking(con) -> bool:
         bool: True if the SALT_CHECK value matches the current hashed salt, False otherwise.
     """
     # Get the SALT_CHECK value from the META table
-    df = con.execute("SELECT SALT_CHECK FROM meta.META").fetchdf()
+    df = con.execute("SELECT SALT_CHECK FROM main.META").fetchdf()
     if df.empty:
         return False  # No SALT_CHECK value found
     
@@ -123,10 +123,10 @@ def start_db(def_tables_path="init_tables"):
         # Preserve the existing SALT_CHECK value
         df["SALT_CHECK"][0] = existing_salt_check
     else:
-        raise ValueError("meta.META is broken, too many results")
+        raise ValueError("main.META is broken, too many results")
 
     # Write the DataFrame back to DuckDB, overwriting the existing table
-    con.execute("CREATE OR REPLACE TABLE meta.META AS SELECT * FROM df")
+    con.execute("CREATE OR REPLACE TABLE main.META AS SELECT * FROM df")
 
     #check db_versions
     check_db_version(con)

@@ -12,7 +12,7 @@ def get_connection():
     duckfunc.get_inventory(con).show()
     
     # Print the contents of the META table
-    print(con.sql("SELECT * from meta.META"))
+    print(con.sql("SELECT * from main.META"))
     
     return con
 
