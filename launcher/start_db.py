@@ -10,7 +10,7 @@ import dbmet
 import parse_db_list
 import db_hash
 
-DB_VER = "1.4"
+DB_VER = "1.4.1"
 print(DB_VER)
 
 def attach_db(con, path, name, readonly=False):
