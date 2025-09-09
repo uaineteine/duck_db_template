@@ -2,7 +2,7 @@
 
 Creates multiple partitioned databases based on input list(s) (csv) supplied by the user. This allows manipulations to be handled and routed through the main driver and possible re-allocation and migration of different components.
 
-![Version 1.4.2](https://img.shields.io/badge/version-1.4.2-brightgreen)
+![Version 1.4.3](https://img.shields.io/badge/version-1.4.3-brightgreen)
 
 #### STATUS 
 
@@ -63,3 +63,7 @@ Function without the default tables made in the `def_tables.csv`. Please only ap
 #### What we want it to do
 
 Automaticlaly produce an svg chart of data items
+
+### Dumping Feature
+
+The dump_db module when executed will ask the user for an output directory and a CSV or parquet format for saving the entire loaded DB into data files of each table.

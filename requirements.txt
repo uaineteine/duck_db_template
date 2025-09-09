@@ -1,4 +1,3 @@
 duckdb
 pandas
-uainepydat==1.5.3
-graphviz
+uainepydat==1.6.2
