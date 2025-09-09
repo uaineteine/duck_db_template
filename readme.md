@@ -63,3 +63,7 @@ Function without the default tables made in the `def_tables.csv`. Please only ap
 #### What we want it to do
 
 Automaticlaly produce an svg chart of data items
+
+### Dumping Feature
+
+The dump_db module when executed will ask the user for an output directory and a CSV or parquet format for saving the entire loaded DB into data files of each table.
