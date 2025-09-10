@@ -44,7 +44,7 @@ The system includes a basic UI interface that can be launched using the `launch_
 2. Generate SQL statements to attach all databases
 3. Launch DuckDB with the UI interface and execute the generated SQL statements
 
-To use the UI feature, simply run the `launch_ui.bat` script from your command line.
+To use the UI feature, simply run the `launch_ui.bat` script from your command line. Currently this requires an installation of duckdbs CLI program to launch the UI component.
 
 ### SECURITY FEATURES
 
