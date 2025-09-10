@@ -58,6 +58,11 @@ This feature helps ensure that your database configuration hasn't been tampered 
 
 ### VIEWS FROM TEMPLATE
 * Setup of views can be made from the `views.csv` list. Update this to create new views in the DB on launch.
+* This template comes with a view of the number of rows per table in the whole DB. 
+
+```sql
+SELECT * FROM db_num_tables_view;
+```
 
 ### WHAT IT WILL NOT DO
 
