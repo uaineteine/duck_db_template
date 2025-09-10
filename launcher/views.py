@@ -50,7 +50,8 @@ def setupviews(con, def_tables_path: str) -> None:
 
     This function compares the views defined in the database with those
     listed in ``views.csv``. Any views present in the CSV but missing from
-    the database are created.
+    the database are created, and any existing views are updated to match
+    the CSV definition.
 
     Parameters
     ----------
@@ -62,8 +63,10 @@ def setupviews(con, def_tables_path: str) -> None:
     Returns
     -------
     None
-        Executes view creation in the database, no direct return value.
+        Executes view creation or replacement in the database, no direct
+        return value.
     """
+
     # Get the views
     db_views = get_db_views(con)
     csv_views = read_db_csv(os.path.join(def_tables_path, "views.csv"))
@@ -74,8 +77,8 @@ def setupviews(con, def_tables_path: str) -> None:
         view_name = row['VIEW_NAME']
         sql_query = row['SQL']
         
-        # Construct the CREATE VIEW statement
-        create_view_stmt = f"CREATE VIEW {view_name} AS {sql_query};"
+        # Construct the CREATE OR REPLACE VIEW statement
+        create_view_stmt = f"CREATE OR REPLACE VIEW {view_name} AS {sql_query};"
         
         # Execute the statement in DuckDB
         con.execute(create_view_stmt)
