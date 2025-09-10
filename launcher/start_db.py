@@ -2,6 +2,7 @@ print("[Uaine DB starter template]")
 import os
 import duckdb
 import sys
+import pandas as pd
 from uainepydat import fileio
 from uainepydat import dataio
 from uainepydat import duckfunc
@@ -9,6 +10,7 @@ from uainepydat import duckfunc
 import dbmet
 import parse_db_list
 import db_hash
+import views
 
 DB_VER = "1.5"
 print(DB_VER)
@@ -135,4 +137,20 @@ def start_db(def_tables_path="init_tables"):
     if not salt_checking(con):
         raise ValueError("SALT_CHECK value mismatch. Potential integrity issue detected.")
     
+    #get the views
+    db_views = views.get_db_views(con)
+    csv_views = views.read_db_csv(os.path.join(def_tables_path, "views.csv"))
+    remaining_views = pd.concat([csv_views, db_views, db_views]).drop_duplicates(keep=False)
+
+    # Assuming remaining_views is a DataFrame with columns: VIEW_NAME and SQL
+    for _, row in remaining_views.iterrows():
+        view_name = row['VIEW_NAME']
+        sql_query = row['SQL']
+        
+        # Construct the CREATE VIEW statement
+        create_view_stmt = f"CREATE VIEW {view_name} AS {sql_query};"
+        
+        # Execute the statement in DuckDB
+        con.execute(create_view_stmt)
+
     return con
