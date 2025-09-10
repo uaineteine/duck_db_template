@@ -1,2 +1,2 @@
 VIEW_NAME,SQL
-db_num_tables_view,SELECT COUNT(*) AS row_count FROM information_schema.tables;
+db_num_tables_view,SELECT table_name, COUNT(*) OVER () AS row_count FROM information_schema.tables;

@@ -1,4 +1,5 @@
 import pandas as pd
+from uainepydat import dataio
 
 def get_db_views(con) -> pd.DataFrame:
     """
@@ -21,6 +22,6 @@ def get_db_views(con) -> pd.DataFrame:
     return df
 
 def read_db_csv(tbl_views_path:str) -> pd.DataFrame:
-    df = pd.read_csv(tbl_views_path)
+    df = dataio.read_flat_psv(tbl_views_path)
 
     return df

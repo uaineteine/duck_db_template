@@ -153,4 +153,7 @@ def start_db(def_tables_path="init_tables"):
         # Execute the statement in DuckDB
         con.execute(create_view_stmt)
 
+    d = con.execute("SELECT * FROM db_num_tables_view;").df()
+    print(d)
+
     return con
