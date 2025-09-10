@@ -56,6 +56,9 @@ The system includes a salt check mechanism to verify database integrity:
 
 This feature helps ensure that your database configuration hasn't been tampered with between sessions.
 
+### VIEWS FROM TEMPLATE
+* Setup of views can be made from the `views.csv` list. Update this to create new views in the DB on launch.
+
 ### WHAT IT WILL NOT DO
 
 Function without the default tables made in the `def_tables.csv`. Please only append to this or use a 2nd csv.
