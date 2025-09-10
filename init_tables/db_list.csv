@@ -1,6 +1,6 @@
 PATH|DB_NAME|PURPOSE
-"DBDAT/main.db"|meta|main
-"DBDAT/users.db"|users|primary
-"DBDAT/models.db"|models|primary
-"DBDAT/annex1.db"|a1|primary
-"DBDAT/annex2.db"|a2|primary
+"DBDAT/main.duckdb"|meta|main
+"DBDAT/users.duckdb"|users|primary
+"DBDAT/models.duckdb"|models|primary
+"DBDAT/annex1.duckdb"|a1|primary
+"DBDAT/annex2.duckdb"|a2|primary

@@ -2,7 +2,7 @@
 
 Creates multiple partitioned databases based on input list(s) (csv) supplied by the user. This allows manipulations to be handled and routed through the main driver and possible re-allocation and migration of different components.
 
-![Version 1.4.3](https://img.shields.io/badge/version-1.4.3-brightgreen)
+![Version 1.5](https://img.shields.io/badge/version-1.5-brightgreen)
 
 #### STATUS 
 
@@ -44,7 +44,7 @@ The system includes a basic UI interface that can be launched using the `launch_
 2. Generate SQL statements to attach all databases
 3. Launch DuckDB with the UI interface and execute the generated SQL statements
 
-To use the UI feature, simply run the `launch_ui.bat` script from your command line.
+To use the UI feature, simply run the `launch_ui.bat` script from your command line. Currently this requires an installation of duckdbs CLI program to launch the UI component.
 
 ### SECURITY FEATURES
 
@@ -55,6 +55,9 @@ The system includes a salt check mechanism to verify database integrity:
 * If a mismatch is detected, the system will raise an error to prevent potential integrity issues
 
 This feature helps ensure that your database configuration hasn't been tampered with between sessions.
+
+### VIEWS FROM TEMPLATE
+* Setup of views can be made from the `views.csv` list. Update this to create new views in the DB on launch.
 
 ### WHAT IT WILL NOT DO
 
