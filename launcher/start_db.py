@@ -116,14 +116,14 @@ def start_db(def_tables_path="init_tables"):
     elif n==1:
         oldtime = dbmet.get_last_launch_time(con)
         # Extract the existing SALT_CHECK value
-        existing_salt_check = df["SALT_CHECK"][0]
+        existing_salt_check = df.loc[0, "SALT_CHECK"]
         # Update other fields
-        df["START_TIME"][0] = now
-        df["PREV_START_TIME"][0] = oldtime
-        df["PYTHON_VERSION"][0] = sys.version.split()[0]
-        df["DUCKDB_VERSION"][0] = duckdb.__version__
+        df.loc[0, "START_TIME"] = now
+        df.loc[0, "PREV_START_TIME"] = oldtime
+        df.loc[0, "PYTHON_VERSION"] = sys.version.split()[0]
+        df.loc[0, "DUCKDB_VERSION"] = duckdb.__version__
         # Preserve the existing SALT_CHECK value
-        df["SALT_CHECK"][0] = existing_salt_check
+        df.loc[0, "SALT_CHECK"] = existing_salt_check
     else:
         raise ValueError("main.META is broken, too many results")
 
