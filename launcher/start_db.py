@@ -139,7 +139,13 @@ def init_tables_from_list(con, new_table_list):
                 import pandas as pd
                 linked_tables = [table.strip() for table in links_str.split(',') if table.strip()]
                 for linked_table in linked_tables:
-                    fk_column_name = f"{linked_table}_ID"
+                    # Extract table name from DBNAME.TABLENAME format if present
+                    if '.' in linked_table:
+                        table_name = linked_table.split('.')[1]  # Get the part after the dot
+                    else:
+                        table_name = linked_table  # Fallback for backward compatibility
+                    
+                    fk_column_name = f"{table_name}_ID"
                     # Check if foreign key column already exists
                     if not (new_table_frame["VARNAME"] == fk_column_name).any():
                         fk_row = pd.DataFrame({

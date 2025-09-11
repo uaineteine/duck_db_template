@@ -7,9 +7,9 @@ main,META,DUCKDB_VERSION,VARCHAR,
 main,META,SALT_CHECK,VARCHAR,
 users,USERS,username,VARCHAR,
 users,USERS,email,VARCHAR,
-users,PROFILES,first_name,VARCHAR,USERS
+users,PROFILES,first_name,VARCHAR,users.USERS
 users,PROFILES,last_name,VARCHAR,
-users,ORDERS,order_date,DATE,USERS
+users,ORDERS,order_date,DATE,users.USERS
 users,ORDERS,total_amount,"DECIMAL(10,2)",
-users,ORDER_ITEMS,quantity,INTEGER,"ORDERS,USERS"
+users,ORDER_ITEMS,quantity,INTEGER,"users.ORDERS,users.USERS"
 users,ORDER_ITEMS,price,"DECIMAL(10,2)",
