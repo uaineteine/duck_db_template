@@ -4,7 +4,6 @@ Script to visualize the live DuckDB network (databases and views) using pyvis.
 import conn
 from uainepydat import duckfunc
 from pyvis.network import Network
-from launcher import parse_db_list
 
 # Connect to the database system
 con = conn.get_connection()
@@ -26,14 +25,22 @@ for idx, row in attached_dbs.iterrows():
 try:
     for idx, row in attached_dbs.iterrows():
         db_name = row['DB_NAME']
-        # Switch to the database and get its views
-        # For DuckDB, views are global, but you can prefix with db_name if needed
-        views_df = con.sql(f"SELECT view_name AS VIEW_NAME FROM {db_name}.duckdb_views()" ).df()
+        # Get all tables in this database using the new tableP_df structure
+        tables_df = duckfunc.get_inventory(con).df()
+        db_tables = tables_df[tables_df['database_name'] == db_name]
+        for _, trow in db_tables.iterrows():
+            table_name = trow['table_name']
+            tlabel = f"{table_name}\n(Table)"
+            net.add_node(f"{db_name}.{table_name}", label=tlabel, color='#3399ff', shape='box')
+            net.add_edge(db_name, f"{db_name}.{table_name}", label='has table')
+
+        # Get all views from main.duckdb_views (views are global in DuckDB)
+        views_df = con.sql("SELECT view_name AS VIEW_NAME FROM main.duckdb_views()" ).df()
         for _, vrow in views_df.iterrows():
             view_name = vrow['VIEW_NAME']
             vlabel = f"{view_name}\n(View)"
-            net.add_node(view_name, label=vlabel, color='#66ff66', shape='ellipse')
-            net.add_edge(db_name, view_name, label='has view')
+            net.add_node(f"{db_name}.{view_name}", label=vlabel, color='#66ff66', shape='ellipse')
+            net.add_edge(db_name, f"{db_name}.{view_name}", label='has view')
 except Exception as e:
     print(f"Error reading views: {e}")
 
