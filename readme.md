@@ -2,7 +2,7 @@
 
 Creates multiple partitioned databases based on input list(s) (csv) supplied by the user. This allows manipulations to be handled and routed through the main driver and possible re-allocation and migration of different components.
 
-![Version 1.5](https://img.shields.io/badge/version-1.5-brightgreen)
+![Version 1.5.1](https://img.shields.io/badge/version-1.5.1-brightgreen)
 
 #### STATUS 
 
@@ -26,7 +26,11 @@ pip install -r requirements.txt
 
 Modify the `db_list.csv` to outline your proposed multi-database structure and then run the start_db script. This will launch the server and return a connection for you to use. any uncreated directories will be produced automatically.
 
-Extend and only EXTEND the `def_tables.csv` list with your porposed schema and empty tables will be generated accordingly on DB start.
+
+**Primary Key Column:**
+All tables will now automatically include an `ID` column as `INT64 PRIMARY KEY` (unless already present in your schema). You do not need to add this manually to your `def_tables.csv`—it will be prepended to every table definition on creation.
+
+Extend and only EXTEND the `def_tables.csv` list with your proposed schema and empty tables will be generated accordingly on DB start.
 
 There are three types of dbs you can use in this list:
 
