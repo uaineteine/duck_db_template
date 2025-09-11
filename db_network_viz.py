@@ -34,8 +34,8 @@ try:
             net.add_node(f"{db_name}.{table_name}", label=tlabel, color='#3399ff', shape='box')
             net.add_edge(db_name, f"{db_name}.{table_name}", label='has table')
 
-        # Get all views from main.duckdb_views (views are global in DuckDB)
-        views_df = con.sql("SELECT view_name AS VIEW_NAME FROM main.duckdb_views()" ).df()
+        # Get only user-created views (schema_name = 'main')
+        views_df = con.sql("SELECT view_name AS VIEW_NAME FROM main.duckdb_views() WHERE schema_name = 'main'" ).df()
         for _, vrow in views_df.iterrows():
             view_name = vrow['VIEW_NAME']
             vlabel = f"{view_name}\n(View)"
