@@ -19,8 +19,9 @@ import parse_db_list
 import db_hash
 import views
 
-DB_VER = "1.5.1"
-print(DB_VER)
+DB_VER = "1.0"
+UAINEDB_VER = "1.5.1"
+print(f"DB_VER: {DB_VER}, UAINEDB_VER: {UAINEDB_VER}")
 
 def attach_db(con, path, name, readonly=False):
     """
@@ -196,6 +197,7 @@ def start_db(def_tables_path="init_tables"):
             "START_TIME": now, 
             "PREV_START_TIME" : "", 
             "DB_VERSION" : str(DB_VER),
+            "UAINEDB_VERSION": str(UAINEDB_VER),
             "PYTHON_VERSION": sys.version.split()[0],
             "DUCKDB_VERSION": duckdb.__version__,
             "SALT_CHECK": db_hash.generate_salt_check()  # Generate new SALT_CHECK for empty table
@@ -205,9 +207,11 @@ def start_db(def_tables_path="init_tables"):
         oldtime = dbmet.get_last_launch_time(con)
         # Extract the existing SALT_CHECK value
         existing_salt_check = df.loc[0, "SALT_CHECK"]
-        # Check for DB_VERSION change
-        old_version = df.loc[0, "DB_VERSION"]
-        if str(DB_VER) != str(old_version):
+        # Check for DB_VERSION or UAINEDB_VERSION change
+        old_db_version = str(df.loc[0, "DB_VERSION"]) if "DB_VERSION" in df.columns else None
+        old_uaine_version = str(df.loc[0, "UAINEDB_VERSION"]) if "UAINEDB_VERSION" in df.columns else None
+        version_changed = (str(DB_VER) != old_db_version) or (str(UAINEDB_VER) != old_uaine_version)
+        if version_changed:
             # Insert previous row into META_HISTORY with timestamp
             meta_hist_row = df.copy()
             meta_hist_row["CREATE_DATE"] = now
@@ -225,6 +229,7 @@ def start_db(def_tables_path="init_tables"):
         # Preserve the existing SALT_CHECK value
         df.loc[0, "SALT_CHECK"] = existing_salt_check
         df.loc[0, "DB_VERSION"] = str(DB_VER)
+        df.loc[0, "UAINEDB_VERSION"] = str(UAINEDB_VER)
     else:
         raise ValueError("main.META is broken, too many results")
 
