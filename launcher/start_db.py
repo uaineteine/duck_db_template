@@ -114,6 +114,7 @@ def start_db(def_tables_path="init_tables"):
     n = len(df)
     if n == 0: #empty table, set this up
         newtime = {
+            "ID": 1,
             "START_TIME": now, 
             "PREV_START_TIME" : "", 
             "DB_VERSION" : str(DB_VER),
