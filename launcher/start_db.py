@@ -65,9 +65,18 @@ def init_tables_from_list(con, new_table_list):
     for i, row in distinct_tables.iterrows():
         DBNAME = row["DBNAME"]
         TABLENAME = row["TABLENAME"]
-        #filter for this result
+        # filter for this result
         new_table_frame = df[df['DBNAME'] == DBNAME].drop(columns=["DBNAME"])
         new_table_frame = new_table_frame[new_table_frame['TABLENAME'] == TABLENAME].drop(columns=["TABLENAME"])
+
+        # Always add ID column as INT64 PRIMARY KEY if not present
+        if not (new_table_frame["VARNAME"] == "ID").any():
+            import pandas as pd
+            id_row = pd.DataFrame({
+                "VARNAME": ["ID"],
+                "TYPE": ["INT64 PRIMARY KEY"]
+            })
+            new_table_frame = pd.concat([id_row, new_table_frame], ignore_index=True)
 
         duckfunc.init_table(con, new_table_frame, DBNAME, TABLENAME)
 
