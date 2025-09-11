@@ -4,3 +4,4 @@ launcher/modules/__pycache__/*
 launcher/__pycache__/*
 lib/*
 db_network.html
+db_network_viz.py

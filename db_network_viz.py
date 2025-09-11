@@ -11,8 +11,17 @@ con = conn.get_connection()
 # Get all attached databases
 attached_dbs = duckfunc.get_attached_dbs(con).df()
 
-# Create a pyvis network
-net = Network(height='600px', width='100%', bgcolor='#222222', font_color='white', directed=True)
+# Create a pyvis network with white background and black font/edges
+net = Network(height='600px', width='100%', bgcolor='#ffffff', font_color='black', directed=True)
+
+# Increase node separation for better visibility
+net.barnes_hut(gravity=-20000, central_gravity=0.1, spring_length=300, spring_strength=0.01, damping=0.09, overlap=0.5)
+net.set_options("""
+{
+    "layout": { "improvedLayout": true },
+    "physics": { "barnesHut": { "springLength": 300, "avoidOverlap": 1 } }
+}
+""")
 
 # Add nodes for each attached database
 for idx, row in attached_dbs.iterrows():
@@ -46,8 +55,11 @@ except Exception as e:
 
 # Optionally, parse view SQL to find dependencies (not implemented here)
 
-# Save and show the network
-net.show('db_network.html', notebook=False)
+
+# Save as a pure HTML file (do not open, just write the HTML string)
+html_str = net.generate_html()
+with open('db_network.html', 'w', encoding='utf-8') as f:
+    f.write(html_str)
 print('Database network visualization saved as db_network.html')
 
 # Close the connection
