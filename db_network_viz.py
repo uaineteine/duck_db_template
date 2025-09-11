@@ -1,39 +1,47 @@
 """
-Script to visualize the database list as a network using pyvis.
+Script to visualize the live DuckDB network (databases and views) using pyvis.
 """
-import os
-import pandas as pd
+import conn
+from uainepydat import duckfunc
 from pyvis.network import Network
 from launcher import parse_db_list
 
-# Path to the db_list.csv file
-DB_LIST_PATH = os.path.join(os.path.dirname(__file__), 'init_tables', 'db_list.csv')
+# Connect to the database system
+con = conn.get_connection()
 
-# Read the database list
-# The CSV uses '|' as a separator
-
-df = pd.read_csv(DB_LIST_PATH, sep='|')
-df = parse_db_list.clean_db_list(df)
+# Get all attached databases
+attached_dbs = duckfunc.get_attached_dbs(con).df()
 
 # Create a pyvis network
 net = Network(height='600px', width='100%', bgcolor='#222222', font_color='white', directed=True)
 
-# Add nodes for each database
-for idx, row in df.iterrows():
+# Add nodes for each attached database
+for idx, row in attached_dbs.iterrows():
     db_name = row['DB_NAME']
-    purpose = row['PURPOSE']
-    label = f"{db_name}\n({purpose})"
-    color = '#ffcc00' if purpose == 'main' else '#00ccff'
-    net.add_node(db_name, label=label, color=color)
+    label = f"{db_name}\n(DB)"
+    color = '#ffcc00' if db_name == 'main' else '#00ccff'
+    net.add_node(db_name, label=label, color=color, shape='database')
 
-# Add edges: meta (main) points to all others
-meta_db = df[df['PURPOSE'] == 'main']['DB_NAME'].values
-if len(meta_db) == 1:
-    meta = meta_db[0]
-    for db_name in df['DB_NAME']:
-        if db_name != meta:
-            net.add_edge(meta, db_name)
+# Add views as nodes and connect to their database
+try:
+    for idx, row in attached_dbs.iterrows():
+        db_name = row['DB_NAME']
+        # Switch to the database and get its views
+        # For DuckDB, views are global, but you can prefix with db_name if needed
+        views_df = con.sql(f"SELECT view_name AS VIEW_NAME FROM {db_name}.duckdb_views()" ).df()
+        for _, vrow in views_df.iterrows():
+            view_name = vrow['VIEW_NAME']
+            vlabel = f"{view_name}\n(View)"
+            net.add_node(view_name, label=vlabel, color='#66ff66', shape='ellipse')
+            net.add_edge(db_name, view_name, label='has view')
+except Exception as e:
+    print(f"Error reading views: {e}")
+
+# Optionally, parse view SQL to find dependencies (not implemented here)
 
 # Save and show the network
 net.show('db_network.html', notebook=False)
 print('Database network visualization saved as db_network.html')
+
+# Close the connection
+conn.close_connection(con)
