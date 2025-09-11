@@ -2,7 +2,7 @@
 
 Creates multiple partitioned databases based on input list(s) (csv) supplied by the user. This allows manipulations to be handled and routed through the main driver and possible re-allocation and migration of different components.
 
-![Version 1.5.1](https://img.shields.io/badge/version-1.5.1-brightgreen)
+![py version](https://img.shields.io/badge/python-3.9+-blue) ![Version 1.5.2](https://img.shields.io/badge/version-1.5.2-brightgreen)
 
 #### STATUS 
 
@@ -26,6 +26,9 @@ pip install -r requirements.txt
 
 Modify the `db_list.csv` to outline your proposed multi-database structure and then run the start_db script. This will launch the server and return a connection for you to use. any uncreated directories will be produced automatically.
 
+```bash
+python example_start.py
+```
 
 **Primary Key Column:**
 All tables will now automatically include an `ID` column as `INT64 PRIMARY KEY` (unless already present in your schema). You do not need to add this manually to your `def_tables.csv`—it will be prepended to every table definition on creation.
@@ -74,8 +77,25 @@ Function without the default tables made in the `def_tables.csv`. Please only ap
 
 #### What we want it to do
 
-Automaticlaly produce an svg chart of data items
+Create foreign keys between tables automatically.
 
 ### Dumping Feature
 
 The dump_db module when executed will ask the user for an output directory and a CSV or parquet format for saving the entire loaded DB into data files of each table.
+
+```bash
+python dump_db.py
+```
+
+### Database Structure Visualization
+
+You can generate an interactive HTML diagram of your current database structure (databases, tables, and user-created views) using the `db_network_viz.py` script. This will output a file named `db_network.html` in your project directory.
+
+To view the diagram, open `db_network.html` in your browser:
+
+```bash
+python db_network_viz.py
+```
+
+![Database Diagram](db_network.html)
+

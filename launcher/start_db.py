@@ -19,8 +19,9 @@ import parse_db_list
 import db_hash
 import views
 
-DB_VER = "1.5.1"
-print(DB_VER)
+DB_VER = "1.0"
+UAINEDB_VER = "1.5.2"
+print(f"DB_VER: {DB_VER}, UAINEDB_VER: {UAINEDB_VER}")
 
 def attach_db(con, path, name, readonly=False):
     """
@@ -180,6 +181,12 @@ def start_db(def_tables_path="init_tables"):
     #attempt to make new tables
     init_tables_from_list(con, os.path.join(def_tables_path, "def_tables.csv"))
 
+    # Ensure META_HISTORY table exists
+    con.execute('''
+        CREATE TABLE IF NOT EXISTS main.META_HISTORY AS 
+        SELECT *, CURRENT_TIMESTAMP AS CREATE_DATE FROM main.META WHERE 1=0
+    ''')
+
     #read out the system time and update it necessary
     now = duckfunc.getCurrentTimeForDuck(timezone_included=True)
     df = dbmet.get_meta_table(con)
@@ -190,6 +197,7 @@ def start_db(def_tables_path="init_tables"):
             "START_TIME": now, 
             "PREV_START_TIME" : "", 
             "DB_VERSION" : str(DB_VER),
+            "UAINEDB_VERSION": str(UAINEDB_VER),
             "PYTHON_VERSION": sys.version.split()[0],
             "DUCKDB_VERSION": duckdb.__version__,
             "SALT_CHECK": db_hash.generate_salt_check()  # Generate new SALT_CHECK for empty table
@@ -199,6 +207,20 @@ def start_db(def_tables_path="init_tables"):
         oldtime = dbmet.get_last_launch_time(con)
         # Extract the existing SALT_CHECK value
         existing_salt_check = df.loc[0, "SALT_CHECK"]
+        # Check for DB_VERSION or UAINEDB_VERSION change
+        old_db_version = str(df.loc[0, "DB_VERSION"]) if "DB_VERSION" in df.columns else None
+        old_uaine_version = str(df.loc[0, "UAINEDB_VERSION"]) if "UAINEDB_VERSION" in df.columns else None
+        version_changed = (str(DB_VER) != old_db_version) or (str(UAINEDB_VER) != old_uaine_version)
+        if version_changed:
+            # Insert previous row into META_HISTORY with timestamp
+            meta_hist_row = df.copy()
+            meta_hist_row["CREATE_DATE"] = now
+            # Write to META_HISTORY
+            cols = ','.join(meta_hist_row.columns)
+            for _, row in meta_hist_row.iterrows():
+                values = tuple(row)
+                placeholders = ','.join(['?']*len(values))
+                con.execute(f"INSERT INTO main.META_HISTORY ({cols}) VALUES ({placeholders})", values)
         # Update other fields
         df.loc[0, "START_TIME"] = now
         df.loc[0, "PREV_START_TIME"] = oldtime
@@ -206,6 +228,8 @@ def start_db(def_tables_path="init_tables"):
         df.loc[0, "DUCKDB_VERSION"] = duckdb.__version__
         # Preserve the existing SALT_CHECK value
         df.loc[0, "SALT_CHECK"] = existing_salt_check
+        df.loc[0, "DB_VERSION"] = str(DB_VER)
+        df.loc[0, "UAINEDB_VERSION"] = str(UAINEDB_VER)
     else:
         raise ValueError("main.META is broken, too many results")
 
@@ -218,7 +242,7 @@ def start_db(def_tables_path="init_tables"):
     # Check the SALT_CHECK value
     if not salt_checking(con):
         raise ValueError("SALT_CHECK value mismatch. Potential integrity issue detected.")
-    
+
     views.setupviews(con, def_tables_path)
 
     return con
