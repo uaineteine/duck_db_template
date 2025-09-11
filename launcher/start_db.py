@@ -1,3 +1,10 @@
+"""
+Main database startup module for DuckDB template system.
+
+This module handles the complete database initialization process including
+database attachment, table creation, metadata management, and view setup.
+It serves as the primary entry point for starting the database system.
+"""
 print("[Uaine DB starter template]")
 import os
 import duckdb
@@ -16,6 +23,20 @@ DB_VER = "1.5.1"
 print(DB_VER)
 
 def attach_db(con, path, name, readonly=False):
+    """
+    Attach a database file to the DuckDB connection.
+    
+    Parameters
+    ----------
+    con : duckdb.DuckDBPyConnection
+        An active DuckDB connection object.
+    path : str
+        Path to the database file to attach.
+    name : str
+        Alias name for the attached database.
+    readonly : bool, optional
+        Whether to attach the database in read-only mode, by default False.
+    """
     fileio.create_filepath_dirs(path)
     ex_string = f"ATTACH DATABASE '{path}' AS {name}"
     if (readonly):
@@ -23,6 +44,19 @@ def attach_db(con, path, name, readonly=False):
     con.execute(ex_string)
 
 def create_and_attach_dbs(def_tables_path):
+    """
+    Create and attach all databases defined in the database list.
+    
+    Parameters
+    ----------
+    def_tables_path : str
+        Path to the directory containing the db_list.csv file.
+    
+    Returns
+    -------
+    duckdb.DuckDBPyConnection
+        DuckDB connection object with all databases attached.
+    """
     # Read the CSV file using pandas
     dblist = os.path.join(def_tables_path, "db_list.csv")
     driver_name, all_names, primary_dbs, secondary_dbs = parse_db_list.parselist(dblist)
@@ -52,12 +86,30 @@ def create_and_attach_dbs(def_tables_path):
     return con
 
 def check_db_version(con):
+    """
+    Check if the database version matches the expected version and warn if not.
+    
+    Parameters
+    ----------
+    con : duckdb.DuckDBPyConnection
+        An active DuckDB connection object.
+    """
     if (dbmet.db_version_match(con, DB_VER) == False):
         print("WARNING: Database version mismatch")
         print("Database version is: " + dbmet.get_db_version(con))
         print("Expecting version " + DB_VER)
 
 def init_tables_from_list(con, new_table_list):
+    """
+    Initialize tables in the database from a table definition list.
+    
+    Parameters
+    ----------
+    con : duckdb.DuckDBPyConnection
+        An active DuckDB connection object.
+    new_table_list : str
+        Path to the CSV file containing table definitions.
+    """
     df = dataio.read_flat_df(new_table_list)
 
     distinct_tables = df[["DBNAME","TABLENAME"]].drop_duplicates()
@@ -104,6 +156,26 @@ def salt_checking(con) -> bool:
     return stored_salt_check == current_salt_check
 
 def start_db(def_tables_path="init_tables"):
+    """
+    Initialize and start the database system with all configurations.
+    
+    Parameters
+    ----------
+    def_tables_path : str, optional
+        Path to the directory containing database and table definitions,
+        by default "init_tables".
+    
+    Returns
+    -------
+    duckdb.DuckDBPyConnection
+        Configured DuckDB connection object with all databases attached,
+        tables initialized, and views set up.
+    
+    Raises
+    ------
+    ValueError
+        If the META table has invalid data or salt check fails.
+    """
     con = create_and_attach_dbs(def_tables_path)
     #attempt to make new tables
     init_tables_from_list(con, os.path.join(def_tables_path, "def_tables.csv"))
