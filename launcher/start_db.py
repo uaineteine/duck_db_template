@@ -180,6 +180,12 @@ def start_db(def_tables_path="init_tables"):
     #attempt to make new tables
     init_tables_from_list(con, os.path.join(def_tables_path, "def_tables.csv"))
 
+    # Ensure META_HISTORY table exists
+    con.execute('''
+        CREATE TABLE IF NOT EXISTS main.META_HISTORY AS 
+        SELECT *, CURRENT_TIMESTAMP AS CREATE_DATE FROM main.META WHERE 1=0
+    ''')
+
     #read out the system time and update it necessary
     now = duckfunc.getCurrentTimeForDuck(timezone_included=True)
     df = dbmet.get_meta_table(con)
@@ -199,6 +205,18 @@ def start_db(def_tables_path="init_tables"):
         oldtime = dbmet.get_last_launch_time(con)
         # Extract the existing SALT_CHECK value
         existing_salt_check = df.loc[0, "SALT_CHECK"]
+        # Check for DB_VERSION change
+        old_version = df.loc[0, "DB_VERSION"]
+        if str(DB_VER) != str(old_version):
+            # Insert previous row into META_HISTORY with timestamp
+            meta_hist_row = df.copy()
+            meta_hist_row["CREATE_DATE"] = now
+            # Write to META_HISTORY
+            cols = ','.join(meta_hist_row.columns)
+            for _, row in meta_hist_row.iterrows():
+                values = tuple(row)
+                placeholders = ','.join(['?']*len(values))
+                con.execute(f"INSERT INTO main.META_HISTORY ({cols}) VALUES ({placeholders})", values)
         # Update other fields
         df.loc[0, "START_TIME"] = now
         df.loc[0, "PREV_START_TIME"] = oldtime
@@ -206,6 +224,7 @@ def start_db(def_tables_path="init_tables"):
         df.loc[0, "DUCKDB_VERSION"] = duckdb.__version__
         # Preserve the existing SALT_CHECK value
         df.loc[0, "SALT_CHECK"] = existing_salt_check
+        df.loc[0, "DB_VERSION"] = str(DB_VER)
     else:
         raise ValueError("main.META is broken, too many results")
 
@@ -218,7 +237,7 @@ def start_db(def_tables_path="init_tables"):
     # Check the SALT_CHECK value
     if not salt_checking(con):
         raise ValueError("SALT_CHECK value mismatch. Potential integrity issue detected.")
-    
+
     views.setupviews(con, def_tables_path)
 
     return con
