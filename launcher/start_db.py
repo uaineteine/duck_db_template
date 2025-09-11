@@ -20,7 +20,7 @@ import db_hash
 import views
 
 DB_VER = "1.0"
-UAINEDB_VER = "1.5.1"
+UAINEDB_VER = "1.5.2"
 print(f"DB_VER: {DB_VER}, UAINEDB_VER: {UAINEDB_VER}")
 
 def attach_db(con, path, name, readonly=False):
