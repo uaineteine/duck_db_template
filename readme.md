@@ -43,6 +43,21 @@ There are three types of dbs you can use in this list:
 
 I would recommend keeping this template as a dedicated sub-folder and importing the start_db script from another module.
 
+### STREAMLIT UI DESIGNER
+
+The system now includes a user-friendly Streamlit web interface for designing and configuring your DuckDB template:
+
+```bash
+streamlit run streamlit_app.py
+```
+
+The Streamlit app provides 3 intuitive tabs:
+- **📊 Databases**: Configure database connections and purposes
+- **🗂️ Tables**: Design table schemas and columns  
+- **👁️ Views**: Create and edit SQL views
+
+Access the app at `http://localhost:8501` after running. See `STREAMLIT_USAGE.md` for detailed instructions.
+
 ### UI FEATURE
 
 The system includes a basic UI interface that can be launched using the `launch_ui.bat` script. This script will:
