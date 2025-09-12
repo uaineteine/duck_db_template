@@ -34,8 +34,8 @@ def load_csv_file(file_path):
     """Load CSV file with error handling"""
     try:
         if os.path.exists(file_path):
-            # Views CSV uses pipe delimiter, others use comma
-            if "views.csv" in file_path:
+            # db_list.csv and views.csv use pipe delimiter, others use comma
+            if "views.csv" in file_path or "db_list.csv" in file_path:
                 return pd.read_csv(file_path, delimiter='|')
             else:
                 return pd.read_csv(file_path)
