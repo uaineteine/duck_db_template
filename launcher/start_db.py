@@ -114,15 +114,24 @@ def init_tables_from_list(con, new_table_list):
     df = dataio.read_flat_df(new_table_list)
 
     distinct_tables = df[["DBNAME","TABLENAME"]].drop_duplicates()
-
+    
+    # Collect foreign key relationships for proper table ordering
+    table_dependencies = {}
+    table_info = {}
+    
+    # First pass: collect table information and dependencies
     for i, row in distinct_tables.iterrows():
         DBNAME = row["DBNAME"]
         TABLENAME = row["TABLENAME"]
+        table_key = f"{DBNAME}.{TABLENAME}"
+        table_dependencies[table_key] = []
+        
         # filter for this result
         new_table_frame = df[df['DBNAME'] == DBNAME].drop(columns=["DBNAME"])
         new_table_frame = new_table_frame[new_table_frame['TABLENAME'] == TABLENAME].drop(columns=["TABLENAME"])
 
         # Process LINKS_TO column if it exists
+        foreign_key_specs = []
         if 'LINKS_TO' in new_table_frame.columns:
             # Get links for this table by finding the first non-empty LINKS_TO value
             links_series = new_table_frame['LINKS_TO'].dropna()
@@ -141,19 +150,34 @@ def init_tables_from_list(con, new_table_list):
                 for linked_table in linked_tables:
                     # Extract table name from DBNAME.TABLENAME format if present
                     if '.' in linked_table:
-                        table_name = linked_table.split('.')[1]  # Get the part after the dot
+                        ref_db = linked_table.split('.')[0]
+                        ref_table = linked_table.split('.')[1]
+                        ref_table_key = f"{ref_db}.{ref_table}"
                     else:
-                        table_name = linked_table  # Fallback for backward compatibility
+                        ref_db = DBNAME  # Fallback for backward compatibility
+                        ref_table = linked_table
+                        ref_table_key = f"{ref_db}.{ref_table}"
                     
-                    fk_column_name = f"{table_name}_ID"
+                    table_dependencies[table_key].append(ref_table_key)
+                    
+                    fk_column_name = f"{ref_table}_ID"
                     # Check if foreign key column already exists
                     if not (new_table_frame["VARNAME"] == fk_column_name).any():
+                        # Use simple table name for references within same database
+                        if ref_db == DBNAME:
+                            fk_type = f"INT64 REFERENCES {ref_table}(ID)"
+                        else:
+                            # Cross-database references not supported, create without constraint
+                            fk_type = "INT64"
+                            print(f"Warning: Cross-database foreign key not supported for {DBNAME}.{TABLENAME}.{fk_column_name} -> {ref_db}.{ref_table}")
+                        
                         fk_row = pd.DataFrame({
                             "VARNAME": [fk_column_name],
-                            "TYPE": ["INT64"],
+                            "TYPE": [fk_type],
                             "LINKS_TO": [""]
                         })
                         new_table_frame = pd.concat([new_table_frame, fk_row], ignore_index=True)
+                        foreign_key_specs.append((fk_column_name, ref_db, ref_table))
             
             # Drop LINKS_TO column before creating table
             new_table_frame = new_table_frame.drop(columns=["LINKS_TO"])
@@ -167,7 +191,80 @@ def init_tables_from_list(con, new_table_list):
             })
             new_table_frame = pd.concat([id_row, new_table_frame], ignore_index=True)
 
-        duckfunc.init_table(con, new_table_frame, DBNAME, TABLENAME)
+        table_info[table_key] = {
+            'frame': new_table_frame,
+            'dbname': DBNAME,
+            'tablename': TABLENAME,
+            'foreign_keys': foreign_key_specs
+        }
+    
+    # Topological sort to determine creation order
+    def topological_sort(dependencies):
+        visited = set()
+        temp_visited = set()
+        result = []
+        
+        def visit(table):
+            if table in temp_visited:
+                # Circular dependency detected, create without foreign keys first
+                return []
+            if table in visited:
+                return []
+                
+            temp_visited.add(table)
+            deps = dependencies.get(table, [])
+            for dep in deps:
+                if dep in dependencies:  # Only process if dependency is in our table list
+                    visit(dep)
+            temp_visited.remove(table)
+            visited.add(table)
+            result.append(table)
+            
+        for table in dependencies:
+            if table not in visited:
+                visit(table)
+                
+        return result
+    
+    creation_order = topological_sort(table_dependencies)
+    
+    # Create tables in dependency order
+    for table_key in creation_order:
+        if table_key in table_info:
+            info = table_info[table_key]
+            try:
+                # Set database context if creating tables with foreign keys in attached databases
+                if info['foreign_keys'] and info['dbname'] != 'main_db':
+                    # Use the database context for foreign key references
+                    con.execute(f"USE {info['dbname']}")
+                
+                duckfunc.init_table(con, info['frame'], info['dbname'], info['tablename'])
+                
+                # Log foreign key relationships that were created
+                for fk_col, ref_db, ref_table in info['foreign_keys']:
+                    print(f"Created foreign key: {info['dbname']}.{info['tablename']}.{fk_col} -> {ref_db}.{ref_table}.ID")
+                    
+            except Exception as e:
+                # If foreign key creation fails, try creating without foreign keys
+                print(f"Warning: Failed to create table {table_key} with foreign keys: {e}")
+                print(f"Retrying without foreign key constraints...")
+                
+                # Create a version without foreign key constraints
+                frame_no_fk = info['frame'].copy()
+                for fk_col, _, _ in info['foreign_keys']:
+                    # Change foreign key column type to just INT64
+                    mask = frame_no_fk['VARNAME'] == fk_col
+                    frame_no_fk.loc[mask, 'TYPE'] = 'INT64'
+                
+                # Reset database context and try again
+                con.execute("USE main_db")
+                duckfunc.init_table(con, frame_no_fk, info['dbname'], info['tablename'])
+            finally:
+                # Always reset to main database context
+                try:
+                    con.execute("USE main_db")
+                except:
+                    pass
 
 def salt_checking(con) -> bool:
     """
