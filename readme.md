@@ -2,7 +2,7 @@
 
 Creates multiple partitioned databases based on input list(s) (csv) supplied by the user. This allows manipulations to be handled and routed through the main driver and possible re-allocation and migration of different components.
 
-![py version](https://img.shields.io/badge/python-3.9+-blue) ![Version 1.6](https://img.shields.io/badge/version-1.6-brightgreen)
+![py version](https://img.shields.io/badge/python-3.9+-blue) ![Version 1.6.1](https://img.shields.io/badge/version-1.6.1-brightgreen)
 
 #### STATUS 
 
@@ -76,15 +76,33 @@ The system includes a basic UI interface that can be launched using the `launch_
 
 To use the UI feature, simply run the `launch_ui.bat` script from your command line. Currently this requires an installation of duckdbs CLI program to launch the UI component.
 
+
 ### SECURITY FEATURES
 
-The system includes a salt check mechanism to verify database integrity:
+The system includes a salt check mechanism to verify database integrity, now using a flexible JSON configuration:
 
-* A unique salt value is generated and stored in the META table during the first database launch
-* On subsequent launches, the system verifies that the stored salt value matches the current calculation
+* The salt configuration is stored in `db_salt.json` (replacing the old `db_salt.txt` format)
+* The JSON file must contain the following fields:
+
+	- `hash_method`: The hash algorithm to use (e.g., `SHA256` or `MD5`)
+	- `key`: The salt value (a random string, e.g., `A7DF3866B66E1BEE8E564DFFC4D30994`)
+	- `truncation_length`: (integer) The number of characters to keep from the hash (e.g., `64` for full SHA256, or a shorter value for truncated hashes)
+
+Example `db_salt.json`:
+
+```json
+{
+	"hash_method": "SHA256",
+	"key": "A7DF3866B66E1BEE8E564DFFC4D30994",
+	"truncation_length": 64
+}
+```
+
+* On first database launch, a hash of the salt is stored in the META table
+* On subsequent launches, the system verifies that the stored hash matches the current calculation using the configured method and truncation
 * If a mismatch is detected, the system will raise an error to prevent potential integrity issues
 
-This feature helps ensure that your database configuration hasn't been tampered with between sessions.
+This feature helps ensure that your database configuration hasn't been tampered with between sessions, and allows you to easily change the hash method or salt policy by editing `db_salt.json`.
 
 ### VIEWS FROM TEMPLATE
 * Setup of views can be made from the `views.csv` list. Update this to create new views in the DB on launch.
