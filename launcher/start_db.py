@@ -122,6 +122,42 @@ def init_tables_from_list(con, new_table_list):
         new_table_frame = df[df['DBNAME'] == DBNAME].drop(columns=["DBNAME"])
         new_table_frame = new_table_frame[new_table_frame['TABLENAME'] == TABLENAME].drop(columns=["TABLENAME"])
 
+        # Process LINKS_TO column if it exists
+        if 'LINKS_TO' in new_table_frame.columns:
+            # Get links for this table by finding the first non-empty LINKS_TO value
+            links_series = new_table_frame['LINKS_TO'].dropna()
+            links_str = ""
+            if not links_series.empty:
+                # Find the first non-empty LINKS_TO value for this table
+                for link_val in links_series:
+                    if link_val and str(link_val).strip():
+                        links_str = str(link_val).strip()
+                        break
+            
+            # Add foreign key columns for linked tables
+            if links_str:
+                import pandas as pd
+                linked_tables = [table.strip() for table in links_str.split(',') if table.strip()]
+                for linked_table in linked_tables:
+                    # Extract table name from DBNAME.TABLENAME format if present
+                    if '.' in linked_table:
+                        table_name = linked_table.split('.')[1]  # Get the part after the dot
+                    else:
+                        table_name = linked_table  # Fallback for backward compatibility
+                    
+                    fk_column_name = f"{table_name}_ID"
+                    # Check if foreign key column already exists
+                    if not (new_table_frame["VARNAME"] == fk_column_name).any():
+                        fk_row = pd.DataFrame({
+                            "VARNAME": [fk_column_name],
+                            "TYPE": ["INT64"],
+                            "LINKS_TO": [""]
+                        })
+                        new_table_frame = pd.concat([new_table_frame, fk_row], ignore_index=True)
+            
+            # Drop LINKS_TO column before creating table
+            new_table_frame = new_table_frame.drop(columns=["LINKS_TO"])
+
         # Always add ID column as INT64 PRIMARY KEY if not present
         if not (new_table_frame["VARNAME"] == "ID").any():
             import pandas as pd
