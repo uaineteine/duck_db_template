@@ -105,7 +105,9 @@ def database_tab():
                 "PURPOSE": st.column_config.SelectboxColumn(
                     "Purpose",
                     help="Database purpose: main (driver), primary (read/write), secondary (read-only)",
-                    options=["main", "primary", "secondary"]
+                    options=["main", "primary", "secondary"],
+                    required=True,
+                    default="main"
                 )
             }
         )
@@ -369,33 +371,51 @@ def main():
     with st.sidebar:
         st.header("🦆 DuckDB Template")
         st.markdown("Use this app to configure your DuckDB template system.")
-        
+
         # Status indicators
         st.subheader("Configuration Status")
-        
+
         # Check file existence
         files_status = {
             "Databases": os.path.exists(DB_LIST_PATH),
             "Tables": os.path.exists(DEF_TABLES_PATH),
             "Views": os.path.exists(VIEWS_PATH)
         }
-        
+
         for name, exists in files_status.items():
             if exists:
                 st.success(f"✅ {name} configured")
             else:
                 st.warning(f"⚠️ {name} not configured")
-        
+
         st.markdown("---")
-        
+
         # Quick actions
         st.subheader("Quick Actions")
         if st.button("🔄 Refresh All Data"):
             st.rerun()
-        
+
         if st.button("📁 Create Missing Directories"):
             os.makedirs(INIT_TABLES_DIR, exist_ok=True)
             st.success("Directories created!")
+
+        st.markdown("---")
+        # --- Large Deploy Button ---
+        st.markdown("<style>div.stButton > button.deployment {height: 4em; font-size: 2em; width: 100%; background-color: #28a745; color: white;}</style>", unsafe_allow_html=True)
+        deploy_clicked = st.button("🚀 DEPLOY INIT TABLES", key="deploy", help="Save all configuration tables", type="primary")
+        if deploy_clicked:
+            # Load current DataFrames
+            df_db = load_csv_file(DB_LIST_PATH)
+            df_tables = load_csv_file(DEF_TABLES_PATH)
+            df_views = load_csv_file(VIEWS_PATH)
+            # Save all
+            ok_db = save_csv_file(df_db, DB_LIST_PATH)
+            ok_tables = save_csv_file(df_tables, DEF_TABLES_PATH)
+            ok_views = save_csv_file(df_views, VIEWS_PATH)
+            if ok_db and ok_tables and ok_views:
+                st.success("All init tables deployed!")
+            else:
+                st.error("Error deploying one or more tables.")
     
     # Create the main tab interface
     create_tabs()
