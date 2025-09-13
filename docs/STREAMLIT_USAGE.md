@@ -5,7 +5,7 @@
 To launch the Streamlit app for designing your DuckDB configuration:
 
 ```bash
-streamlit run streamlit_app.py
+streamlit run design_app.py
 ```
 
 The app will be available at `http://localhost:8501`

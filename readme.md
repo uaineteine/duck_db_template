@@ -56,7 +56,7 @@ I would recommend keeping this template as a dedicated sub-folder and importing 
 The system now includes a user-friendly Streamlit web interface for designing and configuring your DuckDB template:
 
 ```bash
-streamlit run streamlit_app.py
+streamlit run design_app.py
 ```
 
 The Streamlit app provides 3 intuitive tabs:
