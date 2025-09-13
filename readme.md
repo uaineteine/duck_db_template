@@ -33,6 +33,12 @@ python example_start.py
 **Primary Key Column:**
 All tables will now automatically include an `ID` column as `INT64 PRIMARY KEY` (unless already present in your schema). You do not need to add this manually to your `def_tables.csv`—it will be prepended to every table definition on creation.
 
+**Foreign Key Relationships (LINKS_TO):**
+You can now specify table relationships using the `LINKS_TO` column in your `def_tables.csv`. When a table links to another table, foreign key columns will be automatically created:
+- Format: `LINKS_TO` column can contain a single table name or comma-separated list
+- Example: If `PROFILES` links to `USERS`, a `USERS_ID` column (INT64) will be automatically added to the `PROFILES` table
+- Multiple links: `ORDER_ITEMS` linking to `"ORDERS,USERS"` will get both `ORDERS_ID` and `USERS_ID` columns
+
 Extend and only EXTEND the `def_tables.csv` list with your proposed schema and empty tables will be generated accordingly on DB start.
 
 There are three types of dbs you can use in this list:
@@ -92,7 +98,7 @@ Function without the default tables made in the `def_tables.csv`. Please only ap
 
 #### What we want it to do
 
-Create foreign keys between tables automatically.
+~~Create foreign keys between tables automatically.~~ ✅ **COMPLETED**: Foreign key columns are now automatically created based on the `LINKS_TO` specification in `def_tables.csv`.
 
 ### Dumping Feature
 
