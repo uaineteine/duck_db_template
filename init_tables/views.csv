@@ -1,2 +1,3 @@
 VIEW_NAME|SQL
 db_num_tables_view|SELECT table_name, COUNT(*) OVER () AS row_count FROM information_schema.tables;
+table_count_view|SELECT table_catalog, COUNT(*) as table_count FROM information_schema.tables GROUP BY table_catalog;

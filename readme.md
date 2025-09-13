@@ -2,7 +2,7 @@
 
 Creates multiple partitioned databases based on input list(s) (csv) supplied by the user. This allows manipulations to be handled and routed through the main driver and possible re-allocation and migration of different components.
 
-![py version](https://img.shields.io/badge/python-3.9+-blue) ![Version 1.5.2](https://img.shields.io/badge/version-1.5.2-brightgreen)
+![py version](https://img.shields.io/badge/python-3.9+-blue) ![Version 1.6](https://img.shields.io/badge/version-1.6-brightgreen)
 
 #### STATUS 
 
@@ -33,6 +33,14 @@ python example_start.py
 **Primary Key Column:**
 All tables will now automatically include an `ID` column as `INT64 PRIMARY KEY` (unless already present in your schema). You do not need to add this manually to your `def_tables.csv`—it will be prepended to every table definition on creation.
 
+**Foreign Key Relationships (LINKS_TO):**
+You can now specify table relationships using the `LINKS_TO` column in your `def_tables.csv`. When a table links to another table, foreign key columns and **constraints** will be automatically created:
+- Format: `LINKS_TO` column can contain a single table name or comma-separated list
+- Example: If `PROFILES` links to `USERS`, a `USERS_ID` column (INT64) will be automatically added to the `PROFILES` table **with a foreign key constraint**
+- Multiple links: `ORDER_ITEMS` linking to `"ORDERS,USERS"` will get both `ORDERS_ID` and `USERS_ID` columns with constraints
+- **Referential Integrity**: The foreign key constraints enforce data integrity by preventing invalid references and maintaining consistency across related tables
+- **Cross-Database**: Foreign key constraints only work within the same database; cross-database references will create columns without constraints
+
 Extend and only EXTEND the `def_tables.csv` list with your proposed schema and empty tables will be generated accordingly on DB start.
 
 There are three types of dbs you can use in this list:
@@ -42,6 +50,21 @@ There are three types of dbs you can use in this list:
 * The secondary dbs are a read-only connection to a path, this intended for additional instances or hosts of the DB.
 
 I would recommend keeping this template as a dedicated sub-folder and importing the start_db script from another module.
+
+### STREAMLIT UI DESIGNER
+
+The system now includes a user-friendly Streamlit web interface for designing and configuring your DuckDB template:
+
+```bash
+streamlit run design_app.py
+```
+
+The Streamlit app provides 3 intuitive tabs:
+- **📊 Databases**: Configure database connections and purposes
+- **🗂️ Tables**: Design table schemas and columns  
+- **👁️ Views**: Create and edit SQL views
+
+Access the app at `http://localhost:8501` after running. See `STREAMLIT_USAGE.md` for detailed instructions.
 
 ### UI FEATURE
 
@@ -77,7 +100,7 @@ Function without the default tables made in the `def_tables.csv`. Please only ap
 
 #### What we want it to do
 
-Create foreign keys between tables automatically.
+~~Create foreign keys between tables automatically.~~ ✅ **COMPLETED**: Foreign key columns and **constraints** are now automatically created based on the `LINKS_TO` specification in `def_tables.csv`. Referential integrity is enforced at the database level.
 
 ### Dumping Feature
 
